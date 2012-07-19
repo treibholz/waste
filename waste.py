@@ -6,14 +6,25 @@ import web
 
 urls = (
     '/',    'Index',
-    'new',  'New',
+    '/new',  'New',
+    '/setstatus', 'SetStatus',
 )
 
-class Index:
+render = web.template.render('templates', base='base',)
+
+class Index: # {{{
+
+    form = web.form.Form(
+        web.form.Textbox(name="NewTodo", description="New Todo: "),
+        web.form.Button('Add'),
+    )
 
     def GET(self):
-        return "Dummy"
+        form = self.form()
 
+        return render.index(form)
+
+# }}}
 
 app = web.application(urls, globals())
 if __name__ == "__main__":
