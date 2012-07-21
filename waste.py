@@ -15,7 +15,7 @@ render = web.template.render('templates', base='base',)
 class Index: # {{{
 
     form = web.form.Form(
-        web.form.Textbox(name="NewTodo", description="New Todo: "),
+        web.form.Textbox("NewTodo", web.form.notnull, description="New: "),
         web.form.Button('Add'),
     )
 
