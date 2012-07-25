@@ -26,10 +26,10 @@ def new_task(text):
         modified=now(),
         priority=priority('normal'),
         status=status('new'),
-        due=none)
-        
-#def set_tag(task, tag):
+        due=None)
 
-    
+def set_status(task_ID,status):
+    db.update('Tasks', where='id = $task_ID', status=status(status))
+
 
 # vim:fdm=marker:ts=4:sw=4:sts=4:ai:sta:et
