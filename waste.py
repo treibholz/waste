@@ -8,36 +8,54 @@ urls = (
     '/',    'Index',
     '/new',  'New',
     '/setstatus', 'SetStatus',
+    '/delete', 'Delete',
 )
 
 render = web.template.render('templates', base='base',)
 
 class Index: # {{{
 
-    form = web.form.Form(
-        web.form.Textbox("todo", web.form.notnull, description="New: "),
+    NewTaskForm = web.form.Form(
+        web.form.Textbox("title", web.form.notnull, description="New: "),
         web.form.Button('Add'),
     )
 
+    DeleteTaskForm = web.form.Form(
+        web.form.Button('Delete'),
+    )
+
     def GET(self):
-        form = self.form()
+        NewTaskForm = self.NewTaskForm()
+        DeleteTaskForm = self.DeleteTaskForm()
         Tasks = model.get_tasks()
-        return render.index(form, Tasks)
+        return render.index(NewTaskForm, DeleteTaskForm, Tasks)
 
 # }}}
 
 class New: # {{{
-    form = Index.form()
 
     def POST(self):
-        form = self.form()
+        NewTaskForm = Index.NewTaskForm()
 
-        if form.validates():
-            model.new_task(form.d.todo)
+        if NewTaskForm.validates():
+            model.new_task(NewTaskForm.d.title)
 
         raise web.seeother('/')
 
 # }}}
+
+class Delete: # {{{
+
+    def POST(self):
+        DeleteTaskForm = Index.DeleteTaskForm()
+
+        if DeleteTaskForm.validates():
+            model.delete_task(DeleteTaskForm.d.Delete)
+
+        raise web.seeother('/')
+
+# }}}
+
 
 app = web.application(urls, globals())
 if __name__ == "__main__":

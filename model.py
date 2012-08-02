@@ -35,6 +35,9 @@ def set_status(task_ID,status):
 def add_status(status):
     db.insert('Status', name=status)
 
+def delete_task(task_ID):
+    db.delete('Tasks', where='id = %s' % (task_ID, ))
+
 
 
 # vim:fdm=marker:ts=4:sw=4:sts=4:ai:sta:et
