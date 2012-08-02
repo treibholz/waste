@@ -25,8 +25,8 @@ class Index: # {{{
     )
 
     StatusTaskForm = web.form.Form(
-        web.form.Dropdown('Status', args=model.get_status_list_tuple(), description=''),
-        web.form.Button('TaskID', html='Set'),
+        web.form.Hidden('TaskID'),
+        web.form.Dropdown('Status', args=model.get_status_list_tuple(), description='', onchange="dummy"),
     )
 
     def GET(self):
