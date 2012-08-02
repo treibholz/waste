@@ -1,4 +1,19 @@
-$def with (form)
+$def with (form,Tasks)
 
+<form action="" method="post">
 $:form.render()
+</form>
+
+<table>
+<tr>
+    <th>ID</th><th>Title</th><th>Status</th>
+</tr>
+$for task in Tasks:
+    <tr>
+    <td>$task.id</td>
+    <td>$task.title</td>
+    <td>$task.status</td>
+    </tr>
+
+</table>
 

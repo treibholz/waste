@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import web
-#import model
+import model
 
 urls = (
     '/',    'Index',
@@ -15,14 +15,22 @@ render = web.template.render('templates', base='base',)
 class Index: # {{{
 
     form = web.form.Form(
-        web.form.Textbox("NewTodo", web.form.notnull, description="New: "),
+        web.form.Textbox("todo", web.form.notnull, description="New: "),
         web.form.Button('Add'),
     )
 
     def GET(self):
         form = self.form()
+        Tasks = model.get_tasks()
+        return render.index(form, Tasks)
 
-        return render.index(form)
+    def POST(self):
+        form = self.form()
+
+        if form.validates():
+            model.new_task(form.d.todo)
+
+        raise web.seeother('/')
 
 # }}}
 

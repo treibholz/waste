@@ -12,8 +12,9 @@ def priority(priority):
     # dummy
     return 1000
 
-def status(status):
+def status(title):
     # dummy
+    #return db.select('Status', where='name = $title')
     return 0
 
 def get_tasks(order='id'):
@@ -30,6 +31,10 @@ def new_task(text):
 
 def set_status(task_ID,status):
     db.update('Tasks', where='id = $task_ID', status=status(status))
+
+def add_status(status):
+    db.insert('Status', name=status)
+
 
 
 # vim:fdm=marker:ts=4:sw=4:sts=4:ai:sta:et
