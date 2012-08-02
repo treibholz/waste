@@ -14,8 +14,14 @@ def priority(priority):
 
 def status(title):
     # dummy
-    #return db.select('Status', where='name = $title')
-    return 0
+    dbresult = db.select('Status', where="name = '%s'" % (title,)).list()
+    if len(dbresult) == 0:
+        add_status(title)
+        result = status(title)
+    else:
+        result=dbresult[0]['id']
+
+    return result
 
 def get_tasks(order='id'):
     return db.select('Tasks', order=order)
