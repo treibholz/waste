@@ -5,11 +5,12 @@ import web
 import model
 
 urls = (
-    '/',        'Index',
-    '/new',     'New',
-    '/status',  'Status',
-    '/delete',  'Delete',
-    '/edit',    'Edit',
+    '/',            'Index',
+    '/new',         'New',
+    '/status',      'Status',
+    '/delete',      'Delete',
+    '/edit',        'Edit',
+    '/files/(.*)',  'Files',
 )
 
 
@@ -74,6 +75,13 @@ class Status: # {{{
             model.set_status(StatusTaskForm.d.TaskID, StatusTaskForm.d.Status)
 
         raise web.seeother('/')
+
+# }}}
+
+class Files: # {{{
+
+    def GET(self,filename):
+        return open('files/%s' % (filename,) ).read()
 
 # }}}
 

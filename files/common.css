@@ -1,0 +1,13 @@
+html {
+    background-color: transparent;
+}
+
+table.TaskTable tr.TableHead {
+    background-color: blue;
+}
+
+td.ID {
+    font-size = 80%;
+}
+
+

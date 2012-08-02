@@ -4,25 +4,25 @@ $def with (NewTaskForm, DeleteTaskForm, StatusTaskForm, Tasks)
 $:NewTaskForm.render()
 </form>
 
-<table>
-<tr>
-    <th>ID</th>
-    <th>Status</th>
-    <th width="100%">Title</th>
-    <th>Delete</th>
+<table class="TaskTable">
+<tr class="TableHead">
+    <th class="ID">ID</th>
+    <th class="Status">Status</th>
+    <th class="Title">Title</th>
+    <th class="Delete">Delete</th>
 </tr>
 $for task in Tasks:
     $:DeleteTaskForm.TaskID.set_value(task.id)
     $:StatusTaskForm.Status.set_value(task.status)
     $:StatusTaskForm.TaskID.set_value(task.id)
 
-    <tr>
-        <td>$task.id</td>
+    <tr class="Body">
+        <td class="ID">$task.id</td>
 
-        <td><form name="StatusTaskForm$:task.id" action="/status" method="POST" onchange="this.submit()">$:StatusTaskForm.render()</form></td>
+        <td class="Status"><form name="StatusTaskForm$:task.id" action="/status" method="POST" onchange="this.submit()">$:StatusTaskForm.render()</form></td>
 
-        <td>$task.title</td>
-        <td><form action="/delete" method="POST">$:DeleteTaskForm.render()</form></td>
+        <td class="Title">$task.title</td>
+        <td class="Delete"><form action="/delete" method="POST">$:DeleteTaskForm.render()</form></td>
 
     </tr>
 
