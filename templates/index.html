@@ -20,7 +20,7 @@ $for task in Tasks:
         <td>$task.id</td>
         <td>$task.title</td>
 
-        <td><form action="/status" method="GET">$:StatusTaskForm.render()</form></td>
+        <td><form action="/status" method="POST">$:StatusTaskForm.render()</form></td>
 
         <td><form action="/delete" method="POST">$:DeleteTaskForm.render()</form></td>
 

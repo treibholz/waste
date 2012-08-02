@@ -68,7 +68,7 @@ class Status: # {{{
         StatusTaskForm = Index.StatusTaskForm()
 
         if StatusTaskForm.validates():
-            model.set_status(StatusTaskForm.d.Set)
+            model.set_status(StatusTaskForm.d.TaskID, StatusTaskForm.d.Status)
 
         raise web.seeother('/')
 

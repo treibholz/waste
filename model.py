@@ -44,7 +44,7 @@ def new_task(text):
         due=None)
 
 def set_status(task_ID,status):
-    db.update('Tasks', where='id = $task_ID', status=status(status))
+    db.update('Tasks', where='id = %s' % (task_ID,) , status=int(status), modified=now())
 
 def add_status(status):
     db.insert('Status', name=status)
