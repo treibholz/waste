@@ -24,6 +24,11 @@ class Index: # {{{
         Tasks = model.get_tasks()
         return render.index(form, Tasks)
 
+# }}}
+
+class New: # {{{
+    form = Index.form()
+
     def POST(self):
         form = self.form()
 
