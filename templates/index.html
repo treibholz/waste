@@ -12,15 +12,17 @@ $:NewTaskForm.render()
     <th>Delete</th>
 </tr>
 $for task in Tasks:
-    $:DeleteTaskForm.Delete.set_value(task.id)
+    $:DeleteTaskForm.TaskID.set_value(task.id)
     $:StatusTaskForm.Status.set_value(task.status)
+    $:StatusTaskForm.TaskID.set_value(task.id)
+
     <tr>
-    <td>$task.id</td>
-    <td>$task.title</td>
+        <td>$task.id</td>
+        <td>$task.title</td>
 
-    <td><form action="/setstatus" method="GET">$:StatusTaskForm.render()</form></td>
+        <td><form action="/status" method="GET">$:StatusTaskForm.render()</form></td>
 
-    <td><form action="/delete" method="POST">$:DeleteTaskForm.render()</form></td>
+        <td><form action="/delete" method="POST">$:DeleteTaskForm.render()</form></td>
 
     </tr>
 

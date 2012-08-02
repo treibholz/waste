@@ -7,7 +7,7 @@ import model
 urls = (
     '/',    'Index',
     '/new',  'New',
-    '/setstatus', 'SetStatus',
+    '/status', 'Status',
     '/delete', 'Delete',
 )
 
@@ -21,14 +21,13 @@ class Index: # {{{
     )
 
     DeleteTaskForm = web.form.Form(
-        web.form.Button('Delete'),
+        web.form.Button('TaskID', html='Delete'),
     )
 
     StatusTaskForm = web.form.Form(
-#        web.form.Button('Done'),
-        web.form.Dropdown('Status', args=model.get_status_list_tuple(), description='')
+        web.form.Dropdown('Status', args=model.get_status_list_tuple(), description=''),
+        web.form.Button('TaskID', html='Set'),
     )
-
 
     def GET(self):
         NewTaskForm = self.NewTaskForm()
@@ -57,11 +56,24 @@ class Delete: # {{{
         DeleteTaskForm = Index.DeleteTaskForm()
 
         if DeleteTaskForm.validates():
-            model.delete_task(DeleteTaskForm.d.Delete)
+            model.delete_task(DeleteTaskForm.d.TaskID)
 
         raise web.seeother('/')
 
 # }}}
+
+class Status: # {{{
+
+    def POST(self):
+        StatusTaskForm = Index.StatusTaskForm()
+
+        if StatusTaskForm.validates():
+            model.set_task_status(StatusTaskForm.d.Set)
+
+        raise web.seeother('/')
+
+# }}}
+
 
 
 app = web.application(urls, globals())
