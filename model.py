@@ -8,12 +8,18 @@ db = web.database(dbn='sqlite', db='waste.db')
 def now():
     return int(time.time())
 
-def priority(priority):
-    # dummy
-    return 1000
+def priority(title):
+    dbresult = db.select('Priority', where="name = '%s'" % (title,)).list()
+    if len(dbresult) == 0:
+        add_priority(title)
+        result = priority(title)
+    else:
+        result=dbresult[0]['id']
+
+    return result
+
 
 def status(title):
-    # dummy
     dbresult = db.select('Status', where="name = '%s'" % (title,)).list()
     if len(dbresult) == 0:
         add_status(title)
@@ -23,8 +29,8 @@ def status(title):
 
     return result
 
-def get_tasks(order='id'):
-    return db.select('Tasks', order=order)
+def get_tasks(order='id', taskFilter=None):
+    return db.select('Tasks', order=order, where=taskFilter)
 
 def get_status_list_tuple(order='id'):
     statuslist = []
@@ -49,9 +55,19 @@ def set_status(task_ID,status):
 def add_status(status):
     db.insert('Status', name=status)
 
+def add_priority(status):
+    db.insert('Priority', name=status)
+
+
 def delete_task(task_ID):
     db.delete('Tasks', where='id = %s' % (task_ID, ))
 
+def get_taskfilter():
+    # default is "don't show tasks that are set to done more than a minute ago.
+    return "status >= 0 or modified >= %s" % (now() - 60,)
+
+def get_taskorder():
+    return "status desc,modified"
 
 
 # vim:fdm=marker:ts=4:sw=4:sts=4:ai:sta:et

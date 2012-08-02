@@ -7,8 +7,8 @@ $:NewTaskForm.render()
 <table>
 <tr>
     <th>ID</th>
-    <th>Title</th>
     <th>Status</th>
+    <th width="100%">Title</th>
     <th>Delete</th>
 </tr>
 $for task in Tasks:
@@ -18,10 +18,10 @@ $for task in Tasks:
 
     <tr>
         <td>$task.id</td>
-        <td>$task.title</td>
 
         <td><form name="StatusTaskForm$:task.id" action="/status" method="POST" onchange="this.submit()">$:StatusTaskForm.render()</form></td>
 
+        <td>$task.title</td>
         <td><form action="/delete" method="POST">$:DeleteTaskForm.render()</form></td>
 
     </tr>

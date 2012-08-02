@@ -5,19 +5,22 @@ import web
 import model
 
 urls = (
-    '/',    'Index',
-    '/new',  'New',
-    '/status', 'Status',
-    '/delete', 'Delete',
+    '/',        'Index',
+    '/new',     'New',
+    '/status',  'Status',
+    '/delete',  'Delete',
+    '/edit',    'Edit',
 )
+
+
 
 render = web.template.render('templates', base='base',)
 
 class Index: # {{{
 
     NewTaskForm = web.form.Form(
-        web.form.Textbox("title", web.form.notnull, description="New: "),
-        web.form.Button('Add'),
+        web.form.Textbox("title", web.form.notnull, size=50, description="New: "),
+ #       web.form.Button('Add'),
     )
 
     DeleteTaskForm = web.form.Form(
@@ -33,7 +36,7 @@ class Index: # {{{
         NewTaskForm = self.NewTaskForm()
         DeleteTaskForm = self.DeleteTaskForm()
         StatusTaskForm = self.StatusTaskForm()
-        Tasks = model.get_tasks()
+        Tasks = model.get_tasks(model.get_taskorder(), model.get_taskfilter())
         return render.index(NewTaskForm, DeleteTaskForm, StatusTaskForm, Tasks)
 
 # }}}
