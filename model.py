@@ -20,6 +20,14 @@ def status(title):
 def get_tasks(order='id'):
     return db.select('Tasks', order=order)
 
+def get_status_list_tuple(order='id'):
+    statuslist = []
+    result = db.select('Status', order=order)
+    for s in result:
+        statuslist.append(tuple(s.values()))
+    return statuslist
+
+
 def new_task(text):
     db.insert('Tasks',
         title=text,
@@ -34,9 +42,6 @@ def set_status(task_ID,status):
 
 def add_status(status):
     db.insert('Status', name=status)
-
-def delete_task(task_ID):
-    db.delete('Tasks', where='id = %s' % (task_ID, ))
 
 
 

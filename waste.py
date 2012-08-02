@@ -24,11 +24,18 @@ class Index: # {{{
         web.form.Button('Delete'),
     )
 
+    StatusTaskForm = web.form.Form(
+#        web.form.Button('Done'),
+        web.form.Dropdown('Status', args=model.get_status_list_tuple(), description='')
+    )
+
+
     def GET(self):
         NewTaskForm = self.NewTaskForm()
         DeleteTaskForm = self.DeleteTaskForm()
+        StatusTaskForm = self.StatusTaskForm()
         Tasks = model.get_tasks()
-        return render.index(NewTaskForm, DeleteTaskForm, Tasks)
+        return render.index(NewTaskForm, DeleteTaskForm, StatusTaskForm, Tasks)
 
 # }}}
 

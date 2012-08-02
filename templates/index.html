@@ -1,4 +1,4 @@
-$def with (NewTaskForm, DeleteTaskForm, Tasks)
+$def with (NewTaskForm, DeleteTaskForm, StatusTaskForm, Tasks)
 
 <form action="/new" method="post">
 $:NewTaskForm.render()
@@ -13,10 +13,12 @@ $:NewTaskForm.render()
 </tr>
 $for task in Tasks:
     $:DeleteTaskForm.Delete.set_value(task.id)
+    $:StatusTaskForm.Status.set_value(task.status)
     <tr>
     <td>$task.id</td>
     <td>$task.title</td>
-    <td>$task.status</td>
+
+    <td><form action="/setstatus" method="GET">$:StatusTaskForm.render()</form></td>
 
     <td><form action="/delete" method="POST">$:DeleteTaskForm.render()</form></td>
 
