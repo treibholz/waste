@@ -10,6 +10,7 @@ $:NewTaskForm.render()
     <th class="Status">Status</th>
     <th class="Title">Title</th>
     <th class="Delete">Delete</th>
+    <th class="Tags">Tags</th>
 </tr>
 $for task in Tasks:
     $:DeleteTaskForm.TaskID.set_value(task.id)
@@ -21,8 +22,9 @@ $for task in Tasks:
 
         <td class="Status"><form name="StatusTaskForm$:task.id" action="/status" method="POST" onchange="this.submit()">$:StatusTaskForm.render()</form></td>
 
-        <td class="Title">$task.title</td>
+        <td class="Title"><a href="/edit/$task.id">$task.title</a></td>
         <td class="Delete"><form action="/delete" method="POST">$:DeleteTaskForm.render()</form></td>
+        <td class="Tags">tbd</td>
 
     </tr>
 

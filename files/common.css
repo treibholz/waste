@@ -1,13 +1,19 @@
 html {
     background-color: transparent;
+    font-family: sans-serif;
 }
 
 table.TaskTable tr.TableHead {
     background-color: blue;
 }
 
-td.ID {
-    font-size = 80%;
+td.Title {
+    width: 100%;
+}
+
+
+td.ID, td.Status {
+    font-size: 60%;
 }
 
 
