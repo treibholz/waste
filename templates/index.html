@@ -1,7 +1,7 @@
 $def with (NewTaskForm, DeleteTaskForm, StatusTaskForm, Tasks)
 
 <form action="/new" method="POST">
-$:NewTaskForm.render()
+$:NewTaskForm.render_css()
 </form>
 
 <table class="TaskTable">
@@ -20,10 +20,10 @@ $for task in Tasks:
     <tr class="Body">
         <td class="ID">$task.id</td>
 
-        <td class="Status"><form name="StatusTaskForm$:task.id" action="/status" method="POST" onchange="this.submit()">$:StatusTaskForm.render()</form></td>
+        <td class="Status"><form name="StatusTaskForm$:task.id" action="/status" method="POST" onchange="this.submit()">$:StatusTaskForm.render_css()</form></td>
 
         <td class="Title"><a href="/edit/$task.id">$task.title</a></td>
-        <td class="Delete"><form action="/delete" method="POST">$:DeleteTaskForm.render()</form></td>
+        <td class="Delete"><form action="/delete" method="POST">$:DeleteTaskForm.render_css()</form></td>
         <td class="Tags">tbd</td>
 
     </tr>

@@ -20,7 +20,7 @@ render = web.template.render('templates', base='base',)
 class Index: # {{{
 
     NewTaskForm = web.form.Form(
-        web.form.Textbox("title", web.form.notnull, size=50, description="New: "),
+        web.form.Textbox("title", size=50, description="New: "),
  #       web.form.Button('Add'),
     )
 
@@ -30,7 +30,7 @@ class Index: # {{{
 
     StatusTaskForm = web.form.Form(
         web.form.Hidden('TaskID'),
-        web.form.Dropdown('Status', args=model.get_status_list_tuple(), description='', onchange="dummy"),
+        web.form.Dropdown('Status', args=model.get_status_list_tuple(), description=''),
     )
 
     def GET(self):
