@@ -3,9 +3,18 @@ html {
     font-family: sans-serif;
 }
 
+input#title {
+    width: 100%;
+}
+
 table.TaskTable tr.TableHead {
     background-color: blue;
 }
+
+table.TaskTable tr.Body {
+    background-color: yellow;
+}
+
 
 td.Title {
     width: 100%;

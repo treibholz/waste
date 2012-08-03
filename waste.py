@@ -20,7 +20,7 @@ render = web.template.render('templates', base='base',)
 class Index: # {{{
 
     NewTaskForm = web.form.Form(
-        web.form.Textbox("title", size=50, description="New: "),
+        web.form.Textbox("title", description="New: "),
  #       web.form.Button('Add'),
     )
 
