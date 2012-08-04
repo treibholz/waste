@@ -51,7 +51,14 @@ def get_tasks(order='id', taskFilter=None): # {{{
 
 def get_task_tags(taskFilter=None): # {{{
     tasklist = [ t['id'] for t in db.select('Tasks',what='id').list() ]
-    return tasklist
+    taskdict = {}
+    for t in tasklist:
+        taskTags = db.select('Tags', what="Name", where="id in (select tag from Tagged where task = %s )" % (t,)).list()
+        taskTags = [ tag['name'] for tag in taskTags] 
+
+        taskdict[t] = taskTags
+
+    return taskdict
 
 # }}}
 

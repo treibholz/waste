@@ -28,7 +28,9 @@ $for task in Tasks:
         <td class="Title"><a href="/edit/$task.id">$task.title</a></td>
         <td class="Delete"><form action="/delete" method="POST">$:DeleteTaskForm.render_css()</form></td>
         <td class="Tags">
-            tbd
+            $for t in Tags[task.id]:
+                $t
+
         </td>
 
     </tr>
