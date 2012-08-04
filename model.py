@@ -127,10 +127,12 @@ def update_task(TaskID, EditTaskForm, TagIDs): # {{{
 
 def tag_task(taskID, tagName): # {{{
 
-    if type(tagName) == type('string'):
+    if type(tagName) == type(u'string'):
         tagID = tag(tagName)
     else:
         tagID = tagName
+
+    print type(tagName)
 
     db.insert('Tagged',
         task=taskID,
