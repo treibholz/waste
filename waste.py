@@ -38,8 +38,11 @@ class Index: # {{{
         NewTaskForm = self.NewTaskForm()
         DeleteTaskForm = self.DeleteTaskForm()
         StatusTaskForm = self.StatusTaskForm()
+
         Tasks = model.get_tasks(model.get_taskorder(), model.get_taskfilter())
-        return render.index(NewTaskForm, DeleteTaskForm, StatusTaskForm, Tasks)
+        Tags  = model.get_task_tags(model.get_taskfilter())
+
+        return render.index(NewTaskForm, DeleteTaskForm, StatusTaskForm, Tasks, Tags)
 
 # }}}
 

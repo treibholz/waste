@@ -1,4 +1,4 @@
-$def with (NewTaskForm, DeleteTaskForm, StatusTaskForm, Tasks)
+$def with (NewTaskForm, DeleteTaskForm, StatusTaskForm, Tasks, Tags)
 
 <form action="/new" method="POST">
 $:NewTaskForm.render_css()
@@ -24,7 +24,9 @@ $for task in Tasks:
 
         <td class="Title"><a href="/edit/$task.id">$task.title</a></td>
         <td class="Delete"><form action="/delete" method="POST">$:DeleteTaskForm.render_css()</form></td>
-        <td class="Tags">tbd</td>
+        <td class="Tags">
+            tbd
+        </td>
 
     </tr>
 

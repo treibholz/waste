@@ -3,6 +3,11 @@ html {
     font-family: sans-serif;
 }
 
+form{
+    margin:0;
+}
+
+
 input#title {
     width: 50%;
 }
@@ -15,6 +20,7 @@ table.TaskTable tr.TableHead {
 
 tr.TableBody {
     background-color: #aaa;
+
 }
 
 
@@ -30,15 +36,15 @@ tr#Status1.TableBody {
 
 
 
-
-
 td.Title {
     width: 100%;
 }
 
 
-td.ID, td.Status {
+td.ID, td.Tags {
     font-size: 60%;
 }
 
-
+td.ID {
+    text-align: center;
+}

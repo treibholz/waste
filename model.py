@@ -5,10 +5,11 @@ import time
 
 db = web.database(dbn='sqlite', db='waste.db')
 
-def now():
+def now(): # {{{
     return int(time.time())
+# }}}
 
-def priority(title):
+def priority(title): # {{{
     dbresult = db.select('Priority', where="name like '%s'" % (title,)).list()
     if len(dbresult) == 0:
         add_priority(title)
@@ -17,8 +18,9 @@ def priority(title):
         result=dbresult[0]['id']
 
     return result
+# }}}
 
-def status(title):
+def status(title): # {{{
     dbresult = db.select('Status', where="name like '%s'" % (title,)).list()
     if len(dbresult) == 0:
         add_status(title)
@@ -28,7 +30,9 @@ def status(title):
 
     return result
 
-def tag(title):
+# }}}
+
+def tag(title): # {{{
     dbresult = db.select('Tags', where="name like '%s'" % (title,)).list()
     if len(dbresult) == 0:
         add_tag(title)
@@ -38,17 +42,28 @@ def tag(title):
 
     return result
 
-def get_tasks(order='id', taskFilter=None):
+# }}}
+
+def get_tasks(order='id', taskFilter=None): # {{{
     return db.select('Tasks', order=order, where=taskFilter)
 
-def get_status_list_tuple(order='id'):
+# }}}
+
+def get_task_tags(taskFilter=None): # {{{
+    tasklist = [ t['id'] for t in db.select('Tasks',what='id').list() ]
+    return tasklist
+
+# }}}
+
+def get_status_list_tuple(order='id'): # {{{
     statuslist = []
     result = db.select('Status', order=order)
     for s in result:
         statuslist.append(tuple(s.values()))
     return statuslist
+# }}}
 
-def new_task(text,tags):
+def new_task(text, tags): # {{{
 
     tags = [ x.strip() for x in tags.split(',') ]
 
@@ -64,34 +79,49 @@ def new_task(text,tags):
         for t in tags:
             tag_task(taskID, t)
 
-def tag_task(taskID, tagName):
+# }}}
+
+def tag_task(taskID, tagName): # {{{
     db.insert('Tagged',
         task=taskID,
         tag=tag(tagName))
 
-def set_status(task_ID,status):
+# }}}
+
+def set_status(task_ID,status): # {{{
     db.update('Tasks', where='id = %s' % (task_ID,) , status=int(status), modified=now())
 
-def add_status(status):
+# }}}
+
+def add_status(status): # {{{
     db.insert('Status', name=status)
 
-def add_priority(priority):
+# }}}
+
+def add_priority(priority): # {{{
     db.insert('Priority', name=priority)
 
-def add_tag(tag):
+# }}}
+
+def add_tag(tag): # {{{
     db.insert('Tags', name=tag)
 
+# }}}
 
-
-def delete_task(task_ID):
+def delete_task(task_ID): # {{{
     db.delete('Tasks', where='id = %s' % (task_ID, ))
 
-def get_taskfilter():
+# }}}
+
+def get_taskfilter(): # {{{
     # default is "don't show tasks that are set to done more than one day ago.
     return "status >= 0 or modified >= %s" % (now() - 86400,)
 
-def get_taskorder():
+# }}}
+
+def get_taskorder(): # {{{
     return "status desc,modified"
 
+# }}}
 
 # vim:fdm=marker:ts=4:sw=4:sts=4:ai:sta:et
