@@ -2,6 +2,9 @@ $def with (NewTaskForm, DeleteTaskForm, StatusTaskForm, Tasks, Tags)
 
 <form action="/new" method="POST">
 $:NewTaskForm.render_css()
+Edit:
+<a href="/EditTags">Tags</a>
+<a href="/EditStatus">Status</a>
 </form>
 
 <table class="TaskTable">
