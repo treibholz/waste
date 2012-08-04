@@ -147,7 +147,9 @@ def get_taskorder(): # {{{
 
 # }}}
 
-def get_single_task(task):
+def get_single_task(task): # {{{
         return db.select('Tasks', where="id=%s" % task).list()[0]
+
+# }}}
 
 # vim:fdm=marker:ts=4:sw=4:sts=4:ai:sta:et
