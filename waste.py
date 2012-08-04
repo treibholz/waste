@@ -33,16 +33,28 @@ class Index: # {{{
         web.form.Hidden('TaskID'),
         web.form.Dropdown('Status', args=model.get_status_list_tuple(), description=''),
     )
+    DoneTaskForm = web.form.Form(
+        web.form.Hidden('TaskID'),
+        web.form.Button('Status', value=-1, html='Done'),
+    )
+
 
     def GET(self):
         NewTaskForm = self.NewTaskForm()
         DeleteTaskForm = self.DeleteTaskForm()
         StatusTaskForm = self.StatusTaskForm()
+        DoneTaskForm = self.DoneTaskForm()
 
         Tasks = model.get_tasks(model.get_taskorder(), model.get_taskfilter())
         Tags  = model.get_task_tags(model.get_taskfilter())
 
-        return render.index(NewTaskForm, DeleteTaskForm, StatusTaskForm, Tasks, Tags)
+        return render.index(
+            NewTaskForm,
+            DeleteTaskForm,
+            StatusTaskForm,
+            DoneTaskForm,
+            Tasks,
+            Tags)
 
 # }}}
 

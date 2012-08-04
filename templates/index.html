@@ -1,4 +1,4 @@
-$def with (NewTaskForm, DeleteTaskForm, StatusTaskForm, Tasks, Tags)
+$def with (NewTaskForm, DeleteTaskForm, StatusTaskForm, DoneTaskForm, Tasks, Tags)
 
 <form action="/new" method="POST">
 $:NewTaskForm.render_css()
@@ -12,6 +12,7 @@ Edit:
     <th class="ID">ID</th>
     <th class="Status">Status</th>
     <th class="Title">Title</th>
+    <th class="Done">Done</th>
     <th class="Delete">Delete</th>
     <th class="Tags">Tags</th>
 </tr>
@@ -19,18 +20,30 @@ $for task in Tasks:
     $:DeleteTaskForm.TaskID.set_value(task.id)
     $:StatusTaskForm.Status.set_value(task.status)
     $:StatusTaskForm.TaskID.set_value(task.id)
+    $:DoneTaskForm.TaskID.set_value(task.id)
 
     <tr class="TableBody" id="Status$:task.status">
         <td class="ID">$task.id</td>
 
-        <td class="Status"><form name="StatusTaskForm$:task.id" action="/status" method="POST" onchange="this.submit()">$:StatusTaskForm.render_css()</form></td>
+        <td class="Status">
+            <form name="StatusTaskForm$:task.id" action="/status" method="POST" onchange="this.submit()">$:StatusTaskForm.render_css()</form>
+        </td>
 
-        <td class="Title"><a href="/edit/$task.id">$task.title</a></td>
-        <td class="Delete"><form action="/delete" method="POST">$:DeleteTaskForm.render_css()</form></td>
+        <td class="Title">
+            <a href="/edit/$task.id">$task.title</a>
+        </td>
+
+        <td class="Done">
+            <form action="/status" method="POST">$:DoneTaskForm.render_css()</form>
+        </td>
+
+        <td class="Delete">
+            <form action="/delete" method="POST">$:DeleteTaskForm.render_css()</form>
+        </td>
+
         <td class="Tags">
             $for t in Tags[task.id]:
                 $t
-
         </td>
 
     </tr>

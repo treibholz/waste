@@ -41,8 +41,8 @@ td.Title {
 }
 
 
-td.ID, td.Tags {
-    font-size: 60%;
+td.Tags {
+    font-size: 50%;
 }
 
 td.ID {
