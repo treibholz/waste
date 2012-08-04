@@ -21,7 +21,8 @@ class Index: # {{{
 
     NewTaskForm = web.form.Form(
         web.form.Textbox("title", description="New: "),
- #       web.form.Button('Add'),
+        web.form.Textbox("tags", description="Tags: "),
+        web.form.Button('Add'),
     )
 
     DeleteTaskForm = web.form.Form(
@@ -48,7 +49,7 @@ class New: # {{{
         NewTaskForm = Index.NewTaskForm()
 
         if NewTaskForm.validates():
-            model.new_task(NewTaskForm.d.title)
+            model.new_task(NewTaskForm.d.title, NewTaskForm.d.tags)
 
         raise web.seeother('/')
 

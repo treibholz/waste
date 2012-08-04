@@ -9,7 +9,7 @@ def now():
     return int(time.time())
 
 def priority(title):
-    dbresult = db.select('Priority', where="name = '%s'" % (title,)).list()
+    dbresult = db.select('Priority', where="name like '%s'" % (title,)).list()
     if len(dbresult) == 0:
         add_priority(title)
         result = priority(title)
@@ -18,12 +18,21 @@ def priority(title):
 
     return result
 
-
 def status(title):
-    dbresult = db.select('Status', where="name = '%s'" % (title,)).list()
+    dbresult = db.select('Status', where="name like '%s'" % (title,)).list()
     if len(dbresult) == 0:
         add_status(title)
         result = status(title)
+    else:
+        result=dbresult[0]['id']
+
+    return result
+
+def tag(title):
+    dbresult = db.select('Tags', where="name like '%s'" % (title,)).list()
+    if len(dbresult) == 0:
+        add_tag(title)
+        result = tag(title)
     else:
         result=dbresult[0]['id']
 
@@ -39,15 +48,26 @@ def get_status_list_tuple(order='id'):
         statuslist.append(tuple(s.values()))
     return statuslist
 
+def new_task(text,tags):
 
-def new_task(text):
-    db.insert('Tasks',
-        title=text,
-        created=now(),
-        modified=now(),
-        priority=priority('normal'),
-        status=status('new'),
-        due=None)
+    tags = [ x.strip() for x in tags.split(',') ]
+
+    taskID = db.insert('Tasks',
+                title=text,
+                created=now(),
+                modified=now(),
+                priority=priority('normal'),
+                status=status('new'),
+                due=None)
+
+    if tags != ['']:
+        for t in tags:
+            tag_task(taskID, t)
+
+def tag_task(taskID, tagName):
+    db.insert('Tagged',
+        task=taskID,
+        tag=tag(tagName))
 
 def set_status(task_ID,status):
     db.update('Tasks', where='id = %s' % (task_ID,) , status=int(status), modified=now())
@@ -55,8 +75,12 @@ def set_status(task_ID,status):
 def add_status(status):
     db.insert('Status', name=status)
 
-def add_priority(status):
-    db.insert('Priority', name=status)
+def add_priority(priority):
+    db.insert('Priority', name=priority)
+
+def add_tag(tag):
+    db.insert('Tags', name=tag)
+
 
 
 def delete_task(task_ID):
