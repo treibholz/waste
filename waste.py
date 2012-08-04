@@ -9,7 +9,7 @@ urls = (
     '/new',         'New',
     '/status',      'Status',
     '/delete',      'Delete',
-    '/edit',        'Edit',
+    '/edit/(\d*)',        'Edit',
     '/files/(.*)',  'Files',
 )
 
@@ -98,6 +98,27 @@ class Files: # {{{
 
     def GET(self,filename):
         return open('files/%s' % (filename,) ).read()
+
+# }}}
+
+class Edit: # {{{
+
+    def GET(self, task):
+
+        taskData = model.get_single_task(task)
+        taskTags = model.get_task_tag_ids(task)
+
+        EditTaskForm = web.form.Form(
+            web.form.Textbox("title", description="Title: ", value=taskData['title']),
+            web.form.Dropdown('Tags', args=model.get_tag_list_tuple(), description='Tags: ', value=taskTags, multiple=True),
+            web.form.Textbox("AddTags", description="Add Tags: "),
+            web.form.Dropdown('Status', args=model.get_status_list_tuple(), description='Status: ', value=taskData['status']),
+            web.form.Button('Save'),
+            web.form.Button('Cancel'),
+        )
+
+
+        return render.edit(EditTaskForm)
 
 # }}}
 

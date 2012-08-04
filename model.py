@@ -62,12 +62,28 @@ def get_task_tags(taskFilter=None): # {{{
 
 # }}}
 
+def get_task_tag_ids(t): # {{{
+    taskTags = db.select('Tagged', what = "tag", where="task = %s " % (t,)).list()
+    taskTags = [ tag['tag'] for tag in taskTags] 
+
+    return taskTags
+
+# }}}
+
 def get_status_list_tuple(order='id'): # {{{
     statuslist = []
     result = db.select('Status', order=order)
     for s in result:
         statuslist.append(tuple(s.values()))
     return statuslist
+# }}}
+
+def get_tag_list_tuple(order='id'): # {{{
+    taglist = []
+    result = db.select('Tags', order=order)
+    for s in result:
+        taglist.append(tuple(s.values()))
+    return taglist
 # }}}
 
 def new_task(text, tags): # {{{
@@ -130,5 +146,8 @@ def get_taskorder(): # {{{
     return "status desc,modified"
 
 # }}}
+
+def get_single_task(task):
+        return db.select('Tasks', where="id=%s" % task).list()[0]
 
 # vim:fdm=marker:ts=4:sw=4:sts=4:ai:sta:et
