@@ -103,22 +103,38 @@ class Files: # {{{
 
 class Edit: # {{{
 
-    def GET(self, task):
+    EditTaskForm = web.form.Form(
+        web.form.Textbox("Title", description="Title: "),
+        web.form.Dropdown('Tags', args=model.get_tag_list_tuple(), description='Tags: ', multiple=True),
+        web.form.Textbox("AddTags", description="Add Tags: "),
+        web.form.Dropdown('Status', args=model.get_status_list_tuple(), description='Status: '),
+        web.form.Button('Save'),
+        web.form.Button('Cancel'),
+    )
 
+
+    def GET(self, task):
         taskData = model.get_single_task(task)
         taskTags = model.get_task_tag_ids(task)
 
-        EditTaskForm = web.form.Form(
-            web.form.Textbox("title", description="Title: ", value=taskData['title']),
-            web.form.Dropdown('Tags', args=model.get_tag_list_tuple(), description='Tags: ', value=taskTags, multiple=True),
-            web.form.Textbox("AddTags", description="Add Tags: "),
-            web.form.Dropdown('Status', args=model.get_status_list_tuple(), description='Status: ', value=taskData['status']),
-            web.form.Button('Save'),
-            web.form.Button('Cancel'),
-        )
+        EditTaskForm = self.EditTaskForm()
 
+        EditTaskForm.Title.set_value(taskData['title'])
+        EditTaskForm.Tags.set_value(taskTags)
+        EditTaskForm.Status.set_value(taskData['status'])
 
         return render.edit(EditTaskForm)
+
+    def POST(self, task):
+        data = web.webapi.data()
+        editTags = [int(i.split('=')[1]) for i in  data.split('&') if i.split('=')[0] == 'Tags']
+
+        EditTaskForm = self.EditTaskForm()
+
+        if EditTaskForm.validates():
+            model.update_task(task, EditTaskForm, editTags)
+
+        raise web.seeother('/')
 
 # }}}
 

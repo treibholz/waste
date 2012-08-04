@@ -104,10 +104,37 @@ def new_task(text, tags): # {{{
 
 # }}}
 
+def update_task(TaskID, EditTaskForm, TagIDs): # {{{
+    db.update('Tasks',
+                title = EditTaskForm.d.Title,
+                modified = now(),
+                status = EditTaskForm.d.Status,
+                where = 'ID = %s' % TaskID)
+
+    newTags = [ x.strip() for x in EditTaskForm.d.AddTags.split(',') ]
+
+    if TagIDs != []:
+        db.delete('Tagged', where="task = %s" % TaskID )
+        for t in TagIDs:
+            tag_task(TaskID, t)
+
+    if newTags != ['']:
+        for t in newTags:
+            tag_task(TaskID, t)
+
+
+# }}}
+
 def tag_task(taskID, tagName): # {{{
+
+    if type(tagName) == type('string'):
+        tagID = tag(tagName)
+    else:
+        tagID = tagName
+
     db.insert('Tagged',
         task=taskID,
-        tag=tag(tagName))
+        tag=tagID)
 
 # }}}
 
