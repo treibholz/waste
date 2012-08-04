@@ -9,11 +9,27 @@ input#title {
 
 table.TaskTable tr.TableHead {
     background-color: blue;
+    color: white;
 }
 
-table.TaskTable tr.Body {
-    background-color: yellow;
+
+tr.TableBody {
+    background-color: #aaa;
 }
+
+
+tr#Status-1.TableBody {
+    background-color: #bfb;
+}
+tr#Status0.TableBody {
+    background-color: #bbf;
+}
+tr#Status1.TableBody {
+    background-color: #fbb;
+}
+
+
+
 
 
 td.Title {

@@ -63,8 +63,8 @@ def delete_task(task_ID):
     db.delete('Tasks', where='id = %s' % (task_ID, ))
 
 def get_taskfilter():
-    # default is "don't show tasks that are set to done more than a minute ago.
-    return "status >= 0 or modified >= %s" % (now() - 60,)
+    # default is "don't show tasks that are set to done more than one day ago.
+    return "status >= 0 or modified >= %s" % (now() - 86400,)
 
 def get_taskorder():
     return "status desc,modified"

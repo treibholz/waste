@@ -17,7 +17,7 @@ $for task in Tasks:
     $:StatusTaskForm.Status.set_value(task.status)
     $:StatusTaskForm.TaskID.set_value(task.id)
 
-    <tr class="Body">
+    <tr class="TableBody" id="Status$:task.status">
         <td class="ID">$task.id</td>
 
         <td class="Status"><form name="StatusTaskForm$:task.id" action="/status" method="POST" onchange="this.submit()">$:StatusTaskForm.render_css()</form></td>
