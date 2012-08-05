@@ -1,11 +1,17 @@
-$def with (NewTaskForm, DeleteTaskForm, StatusTaskForm, DoneTaskForm, Tasks, Tags)
+$def with (NewTaskForm, DeleteTaskForm, StatusTaskForm, DoneTaskForm, FilterForm, Tasks, Tags)
 
-<form action="/new" method="POST">
-$:NewTaskForm.render_css()
-Edit:
-<a href="/tags">Tags</a>
-<a href="/status">Status(es)</a>
-</form>
+<div class='NewTask'>
+    <form action="/new" method="POST">
+        $:NewTaskForm.render_css()
+    </form>
+</div>
+<div class='TaskFilter'>
+    <form action="/filter" method="POST">
+        $:FilterForm.render_css()
+    </form>
+</div>
+
+
 
 <table class="TaskTable">
 <tr class="TableHead">
@@ -51,4 +57,6 @@ $for task in Tasks:
     </tr>
 
 </table>
+Edit:
+<a href="/tags">Tags</a>
 

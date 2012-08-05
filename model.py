@@ -5,6 +5,11 @@ import time
 
 db = web.database(dbn='sqlite', db='waste.db')
 
+task_where = {
+    'Status' : ( '(status >= $task_where["Status"][1] or modified >= strftime("%s","now") - 86400 )', 0, ),
+    'Tags' : None,
+}
+
 def now(): # {{{
     return int(time.time())
 # }}}
@@ -45,7 +50,7 @@ def tag(title): # {{{
 # }}}
 
 def get_tasks(order='id', taskFilter=None): # {{{
-    return db.select('Tasks', order=order, where=taskFilter)
+    return db.select('Tasks', order=order, where=taskFilter, vars=globals())
 
 # }}}
 
@@ -199,9 +204,45 @@ def delete_tag(tag_ID): # {{{
 
 def get_taskfilter(): # {{{
     # default is "don't show tasks that are set to done more than one day ago.
-    return "status >= 0 or modified >= %s" % (now() - 86400,)
+    taskfilter = '1'
+    for i in task_where.values():
+        if i != None:
+            taskfilter = '%s AND %s' % (taskfilter, i[0],)
+
+    return taskfilter
 
 # }}}
+
+def set_tag_filter(TagFilter): # {{{
+
+    TagFilterList = [ x.strip() for x in TagFilter.split(',') ]
+
+    taglist = []
+    for tag in TagFilterList:
+        try:
+            taglist.append(db.select('Tags',what='id', where='name like $tag', vars=locals()).list()[0]['id'])
+        except:
+            # EVIL
+            pass
+
+    if taglist != []:
+        task_where['Tags'] = ( "id in (select task from Tagged where tag in $task_where['Tags'][1])", taglist, )
+    else:
+        task_where['Tags'] = None
+
+# }}}
+
+def get_tag_filter(): # {{{
+
+    result = ''
+
+    if task_where['Tags'] != None:
+        for t in db.select('Tags', what='name', where='id in $task_where["Tags"][1]', vars=globals()):
+            result += '%s, ' % t['name']
+
+    return result
+# }}}
+
 
 def get_taskorder(): # {{{
     return "status desc,modified"

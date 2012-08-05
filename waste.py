@@ -5,15 +5,16 @@ import web
 import model
 
 urls = (
-    '/',            'Index',
-    '/new',         'New',
-    '/status',      'Status',
-    '/delete',      'Delete',
-    '/edit/(\d*)',  'Edit',
-    '/files/(.*)',  'Files',
-    '/tags',        'Tags',
-    '/tags/delete', 'Tags_delete',
-    '/tags/update', 'Tags_update',
+    '/',                'Index',
+    '/new',             'New',
+    '/status',          'Status',
+    '/filter',          'Filter',
+    '/delete',          'Delete',
+    '/edit/(\d*)',      'Edit',
+    '/files/(.*)',      'Files',
+    '/tags',            'Tags',
+    '/tags/delete',     'Tags_delete',
+    '/tags/update',     'Tags_update',
 )
 
 render = web.template.render('templates', base='base',)
@@ -39,22 +40,29 @@ class Index: # {{{
         web.form.Button('Status', value=-1, html='Done'),
     )
 
+    FilterForm = web.form.Form(
+        web.form.Textbox("TagFilter", description="Filter Tags: "),
+    )
 
     def GET(self):
         NewTaskForm = self.NewTaskForm()
         DeleteTaskForm = self.DeleteTaskForm()
         StatusTaskForm = self.StatusTaskForm()
         DoneTaskForm = self.DoneTaskForm()
+        FilterForm = self.FilterForm()
 
         Tasks = model.get_tasks(model.get_taskorder(), model.get_taskfilter())
         Tags  = model.get_task_tags(model.get_taskfilter())
+
         StatusTaskForm.Status.args=model.get_status_list_tuple()
+        FilterForm.TagFilter.value=model.get_tag_filter()
 
         return render.index(
             NewTaskForm,
             DeleteTaskForm,
             StatusTaskForm,
             DoneTaskForm,
+            FilterForm,
             Tasks,
             Tags)
 
@@ -191,6 +199,19 @@ class Tags_update: # {{{
         raise web.seeother('/tags')
 
 # }}}
+
+class Filter: # {{{
+
+    def POST(self):
+        FilterForm = Index.FilterForm()
+
+        if FilterForm.validates():
+            model.set_tag_filter(FilterForm.d.TagFilter)
+
+        raise web.seeother('/')
+
+# }}}
+
 
 
 app = web.application(urls, globals())

@@ -7,10 +7,11 @@ form{
     margin:0;
 }
 
-
+/*
 input#title {
     width: 50%;
 }
+*/
 
 table.TaskTable tr.TableHead {
     background-color: blue;
