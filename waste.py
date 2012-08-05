@@ -31,7 +31,7 @@ class Index: # {{{
 
     StatusTaskForm = web.form.Form(
         web.form.Hidden('TaskID'),
-        web.form.Dropdown('Status', args=model.get_status_list_tuple(), description=''),
+        web.form.Dropdown('Status', args=(1,'dummy',), description=''),
     )
     DoneTaskForm = web.form.Form(
         web.form.Hidden('TaskID'),
@@ -47,6 +47,7 @@ class Index: # {{{
 
         Tasks = model.get_tasks(model.get_taskorder(), model.get_taskfilter())
         Tags  = model.get_task_tags(model.get_taskfilter())
+        StatusTaskForm.Status.args=model.get_status_list_tuple()
 
         return render.index(
             NewTaskForm,
