@@ -9,8 +9,9 @@ urls = (
     '/new',         'New',
     '/status',      'Status',
     '/delete',      'Delete',
-    '/edit/(\d*)',        'Edit',
+    '/edit/(\d*)',  'Edit',
     '/files/(.*)',  'Files',
+    '/tags',        'Tags',
 )
 
 
@@ -142,6 +143,31 @@ class Edit: # {{{
 
 # }}}
 
+class Tags: # {{{
+
+    DeleteTagForm = web.form.Form(
+        web.form.Button('TagID', html='Delete'),
+    )
+
+    EditTagForm = web.form.Form(
+        web.form.Textbox("Name", description=''),
+        web.form.Hidden('TagID'),
+    )
+
+    def GET(self):
+        DeleteTagForm   = self.DeleteTagForm()
+        EditTagForm     = self.EditTagForm()
+
+        usedTags        = model.get_tag_tasks()
+        Tags            = model.get_tags()
+
+        return render.tags(
+            Tags,
+            DeleteTagForm,
+            EditTagForm,
+            usedTags)
+
+# }}}
 
 
 app = web.application(urls, globals())

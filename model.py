@@ -49,6 +49,11 @@ def get_tasks(order='id', taskFilter=None): # {{{
 
 # }}}
 
+def get_tags(order='id'): # {{{
+    return db.select('Tags', order=order)
+
+# }}}
+
 def get_task_tags(taskFilter=None): # {{{
     tasklist = [ t['id'] for t in db.select('Tasks',what='id').list() ]
     taskdict = {}
@@ -59,6 +64,20 @@ def get_task_tags(taskFilter=None): # {{{
         taskdict[t] = taskTags
 
     return taskdict
+
+# }}}
+
+def get_tag_tasks(): # {{{
+    taglist = [ t['id'] for t in db.select('Tags',what='id').list() ]
+    tagdict = {}
+
+    for t in taglist:
+        tagTasks = db.select('Tagged', what="task", where="tag = %s " % (t,)).list()
+        tagTasks = [ task['task'] for task in tagTasks] 
+
+        tagdict[t] = tagTasks
+
+    return tagdict
 
 # }}}
 

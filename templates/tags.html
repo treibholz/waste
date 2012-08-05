@@ -1,0 +1,34 @@
+$def with (Tags, DeleteTagForm, EditTagForm, usedTags)
+
+<table class="TaskTable">
+<tr class="TableHead">
+    <th class="ID">ID</th>
+    <th class="Delete">Delete</th>
+    <th class="Tag">Name</th>
+    <th class="used">used by Tasks</th>
+</tr>
+$for tag in Tags:
+    $:DeleteTagForm.TagID.set_value(tag.id)
+    $:EditTagForm.TagID.set_value(tag.id)
+    $:EditTagForm.Name.set_value(tag.name)
+
+    <tr class="TableBody">
+        <td class="ID">$tag.id</td>
+
+        <td class="Delete">
+            <form action="/tags/delete" method="POST">$:DeleteTagForm.render_css()</form>
+        </td>
+
+        <td class="Name">
+            <form action="/tags/update" method="POST">$:EditTagForm.render_css()</form>
+        </td>
+
+        <td class="Tasks">
+            $for t in usedTags[tag.id]:
+                <a href="/edit/$t">$t</a>
+        </td>
+
+    </tr>
+
+</table>
+
