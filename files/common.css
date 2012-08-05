@@ -24,6 +24,13 @@ tr.TableBody {
 
 }
 
+.NewTask {
+    text-align: left;
+}
+
+.TaskFilter {
+    text-align: right;
+}
 
 tr#Status-1.TableBody {
     background-color: #bfb;

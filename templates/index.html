@@ -19,8 +19,8 @@ $def with (NewTaskForm, DeleteTaskForm, StatusTaskForm, DoneTaskForm, FilterForm
     <th class="Status">Status</th>
     <th class="Title">Title</th>
     <th class="Done">Done</th>
-    <th class="Delete">Delete</th>
     <th class="Tags">Tags</th>
+    <th class="Delete"><img src="/files/delete.svg" width=16px alt="Delete"/></th>
 </tr>
 $for task in Tasks:
     $:DeleteTaskForm.TaskID.set_value(task.id)
@@ -43,16 +43,17 @@ $for task in Tasks:
             <form action="/status" method="POST">$:DoneTaskForm.render_css()</form>
         </td>
 
-        <td class="Delete">
-            <form action="/delete" method="POST">$:DeleteTaskForm.render_css()</form>
-        </td>
-
         <td class="Tags">
             <ul class="Tags">
                 $for t in Tags[task.id]:
                     <li class='Tag'>$t</li>
             </ul>
         </td>
+
+        <td class="Delete">
+            <form action="/delete" method="POST">$:DeleteTaskForm.render_css()</form>
+        </td>
+
 
     </tr>
 

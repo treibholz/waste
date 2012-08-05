@@ -29,7 +29,7 @@ class Index: # {{{
     )
 
     DeleteTaskForm = web.form.Form(
-        web.form.Button('TaskID', html='Delete'),
+        web.form.Button('TaskID', html='<img src="/files/delete.svg" height=16px alt="Delete"/>'),
     )
 
     StatusTaskForm = web.form.Form(
