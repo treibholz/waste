@@ -14,14 +14,12 @@ urls = (
     '/tags',        'Tags',
 )
 
-
-
 render = web.template.render('templates', base='base',)
 
 class Index: # {{{
 
     NewTaskForm = web.form.Form(
-        web.form.Textbox("title", description="New: "),
+        web.form.Textbox("title", web.form.notnull, description="New: "),
         web.form.Textbox("tags", description="Tags: "),
         web.form.Button('Add'),
     )
@@ -106,14 +104,13 @@ class Files: # {{{
 class Edit: # {{{
 
     EditTaskForm = web.form.Form(
-        web.form.Textbox("Title", description="Title: "),
+        web.form.Textbox("Title", web.form.notnull, description="Title: "),
         web.form.Dropdown('Tags', args=(), description='Tags: ', multiple=True),
         web.form.Textbox("AddTags", description="Add Tags: "),
         web.form.Dropdown('Status', args=(), description='Status: '),
         web.form.Button('Save'),
-        web.form.Button('Cancel'),
+        web.form.Button('Cancel', value=True),
     )
-
 
     def GET(self, task):
         taskData = model.get_single_task(task)
@@ -136,7 +133,7 @@ class Edit: # {{{
 
         EditTaskForm = self.EditTaskForm()
 
-        if EditTaskForm.validates():
+        if EditTaskForm.validates() and not EditTaskForm.d.Cancel:
             model.update_task(task, EditTaskForm, editTags)
 
         raise web.seeother('/')
