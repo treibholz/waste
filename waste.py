@@ -43,7 +43,8 @@ class Index: # {{{
 
     FilterForm = web.form.Form(
         web.form.Textbox("TagFilter", description="Filter Tags: "),
-        web.form.Button("ClearTagFilter", html='<img src="/files/clearfilter.svg" height=16px alt="Clear"/>'),
+        web.form.Button("AddTagFilter", hidden=True),
+        web.form.Button("ClearTagFilter", html='<img src="/files/clearfilter.svg" height=16px alt="Clear"/>', value=True),
     )
 
     def GET(self):
@@ -206,9 +207,14 @@ class Filter: # {{{
 
     def POST(self):
         FilterForm = Index.FilterForm()
+    
+        print FilterForm.d.ClearTagFilter
 
         if FilterForm.validates():
-            model.set_tag_filter(FilterForm.d.TagFilter)
+            if FilterForm.d.ClearTagFilter:
+                model.set_tag_filter('')
+            else:
+                model.set_tag_filter(FilterForm.d.TagFilter)
 
         raise web.seeother('/')
 
