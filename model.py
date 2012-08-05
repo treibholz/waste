@@ -151,8 +151,6 @@ def tag_task(taskID, tagName): # {{{
     else:
         tagID = tagName
 
-    print type(tagName)
-
     db.insert('Tagged',
         task=taskID,
         tag=tagID)
