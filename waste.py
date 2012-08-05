@@ -23,8 +23,8 @@ render = web.template.render('templates', base='base',)
 class Index: # {{{
 
     NewTaskForm = web.form.Form(
-        web.form.Textbox("title", web.form.notnull, description="New: "),
-        web.form.Textbox("tags", description="Tags: "),
+        web.form.Textbox("title", web.form.notnull, description="New: ", placeholder="Add a new Task"),
+        web.form.Textbox("tags", description='', placeholder="Tags, comma-separated"),
         web.form.Button('Add'),
     )
 
