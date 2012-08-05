@@ -9,8 +9,9 @@ Features
 --------
 
     * a colorful WebUI
-    * free defineable Tags. As many tags as the DBMS (sqlite3 atm.) can handle
-    * free defineable Status. Also as many as the DMBS can handle.
+    * free defineable tags. As many tags as the DBMS (sqlite3 atm.) can handle
+    * free defineable status. Also as many as the DMBS can handle.
+    * a tagfilter
 
 Planned Features
 ----------------
