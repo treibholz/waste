@@ -15,6 +15,7 @@ urls = (
     '/tags',            'Tags',
     '/tags/delete',     'Tags_delete',
     '/tags/update',     'Tags_update',
+    '/favicon.ico',     'Favicon',
 )
 
 render = web.template.render('templates', base='base',)
@@ -210,6 +211,12 @@ class Filter: # {{{
 
         raise web.seeother('/')
 
+# }}}
+
+class Favicon: # {{{
+
+    def GET(self):
+        return open('files/favicon.ico' ).read()
 # }}}
 
 
