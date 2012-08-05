@@ -245,7 +245,7 @@ def get_tag_filter(): # {{{
 
 
 def get_taskorder(): # {{{
-    return "status desc,modified"
+    return "status desc,modified desc"
 
 # }}}
 
