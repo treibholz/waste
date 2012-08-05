@@ -243,7 +243,6 @@ def get_tag_filter(): # {{{
     return result
 # }}}
 
-
 def get_taskorder(): # {{{
     return "status desc,modified desc"
 
@@ -254,4 +253,20 @@ def get_single_task(task): # {{{
 
 # }}}
 
+# API
+
+def api_get_tasks(order='id', taskFilter=None): # {{{
+    task_list = []
+    tasks = db.select('Tasks', order=order, where=taskFilter, vars=globals()).list()
+
+    # There must be a better way for the following...
+    for t in tasks:
+        t_dict={}
+        for k in t:
+            t_dict[k] = t[k]
+        task_list.append(t_dict)
+
+    return task_list
+
+# }}}
 # vim:fdm=marker:ts=4:sw=4:sts=4:ai:sta:et

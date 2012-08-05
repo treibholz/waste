@@ -16,6 +16,7 @@ urls = (
     '/tags/delete',     'Tags_delete',
     '/tags/update',     'Tags_update',
     '/favicon.ico',     'Favicon',
+    '/api/(.*)',        'Api',
 )
 
 render = web.template.render('templates', base='base',)
@@ -207,8 +208,6 @@ class Filter: # {{{
 
     def POST(self):
         FilterForm = Index.FilterForm()
-    
-        print FilterForm.d.ClearTagFilter
 
         if FilterForm.validates():
             if FilterForm.d.ClearTagFilter:
@@ -226,7 +225,12 @@ class Favicon: # {{{
         return open('files/favicon.ico' ).read()
 # }}}
 
+class Api:
 
+    def GET(self, call):
+
+        if call.lower() == 'get_tasks':
+            return model.api_get_tasks(model.get_taskorder(), model.get_taskfilter())
 
 app = web.application(urls, globals())
 if __name__ == "__main__":
