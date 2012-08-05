@@ -149,7 +149,7 @@ class Tags: # {{{
     )
 
     EditTagForm = web.form.Form(
-        web.form.Textbox("Name", description=''),
+        web.form.Textbox("Name", web.form.notnull, description=''),
         web.form.Hidden('TagID'),
     )
 
@@ -175,6 +175,18 @@ class Tags_delete: # {{{
 
         if DeleteTagForm.validates():
             model.delete_tag(DeleteTagForm.d.TagID)
+
+        raise web.seeother('/tags')
+
+# }}}
+
+class Tags_update: # {{{
+
+    def POST(self):
+        EditTagForm = Tags.EditTagForm()
+
+        if EditTagForm.validates():
+            model.update_tag(EditTagForm.d.TagID, EditTagForm.d.Name)
 
         raise web.seeother('/tags')
 

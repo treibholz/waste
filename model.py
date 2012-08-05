@@ -91,7 +91,7 @@ def get_task_tag_ids(t): # {{{
 
 def get_status_list_tuple(order='id'): # {{{
     statuslist = []
-    result = db.select('Status', order=order)
+    result = db.select('Status', what='id, name', order=order)
     for s in result:
         statuslist.append(tuple(s.values()))
     return statuslist
@@ -99,7 +99,7 @@ def get_status_list_tuple(order='id'): # {{{
 
 def get_tag_list_tuple(order='id'): # {{{
     taglist = []
-    result = db.select('Tags', order=order)
+    result = db.select('Tags', what="id,name", order=order)
     for s in result:
         taglist.append(tuple(s.values()))
     return taglist
@@ -144,6 +144,14 @@ def update_task(TaskID, EditTaskForm, TagIDs): # {{{
 
 # }}}
 
+def update_tag(TagID, Name): # {{{
+    db.update('Tags',
+                name = Name,
+                modified = now(),
+                where = 'ID = %s' % TagID)
+
+# }}}
+
 def tag_task(taskID, tagName): # {{{
 
     if type(tagName) == type(u'string'):
@@ -152,6 +160,7 @@ def tag_task(taskID, tagName): # {{{
         tagID = tagName
 
     db.insert('Tagged',
+        modified = now(),
         task=taskID,
         tag=tagID)
 
@@ -163,7 +172,7 @@ def set_status(task_ID,status): # {{{
 # }}}
 
 def add_status(status): # {{{
-    db.insert('Status', name=status)
+    db.insert('Status', name=status, modified=now()) 
 
 # }}}
 
