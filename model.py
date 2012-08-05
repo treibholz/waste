@@ -182,6 +182,12 @@ def delete_task(task_ID): # {{{
 
 # }}}
 
+def delete_tag(tag_ID): # {{{
+    db.delete('Tags', where='id = %s' % (tag_ID, ))
+    db.delete('Tagged', where='task = %s' % (tag_ID, ))
+
+# }}}
+
 def get_taskfilter(): # {{{
     # default is "don't show tasks that are set to done more than one day ago.
     return "status >= 0 or modified >= %s" % (now() - 86400,)

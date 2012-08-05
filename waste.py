@@ -12,6 +12,8 @@ urls = (
     '/edit/(\d*)',  'Edit',
     '/files/(.*)',  'Files',
     '/tags',        'Tags',
+    '/tags/delete', 'Tags_delete',
+    '/tags/update', 'Tags_update',
 )
 
 render = web.template.render('templates', base='base',)
@@ -163,6 +165,18 @@ class Tags: # {{{
             DeleteTagForm,
             EditTagForm,
             usedTags)
+
+# }}}
+
+class Tags_delete: # {{{
+
+    def POST(self):
+        DeleteTagForm = Tags.DeleteTagForm()
+
+        if DeleteTagForm.validates():
+            model.delete_tag(DeleteTagForm.d.TagID)
+
+        raise web.seeother('/tags')
 
 # }}}
 
