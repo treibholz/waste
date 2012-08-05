@@ -31,10 +31,12 @@ Button {
 
 .NewTask {
     text-align: left;
+    border: 1pt solid blue;
 }
 
 .TaskFilter {
     text-align: right;
+    border: 1pt solid blue;
 }
 
 tr#Status-1.TableBody {

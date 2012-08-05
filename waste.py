@@ -43,6 +43,7 @@ class Index: # {{{
 
     FilterForm = web.form.Form(
         web.form.Textbox("TagFilter", description="Filter Tags: "),
+        web.form.Button("ClearTagFilter", html='<img src="/files/clearfilter.svg" height=16px alt="Clear"/>'),
     )
 
     def GET(self):
