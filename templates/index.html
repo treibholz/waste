@@ -42,8 +42,10 @@ $for task in Tasks:
         </td>
 
         <td class="Tags">
-            $for t in Tags[task.id]:
-                $t
+            <ul class="Tags">
+                $for t in Tags[task.id]:
+                    <li class='Tag'>$t</li>
+            </ul>
         </td>
 
     </tr>

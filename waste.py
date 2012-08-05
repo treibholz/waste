@@ -105,9 +105,9 @@ class Edit: # {{{
 
     EditTaskForm = web.form.Form(
         web.form.Textbox("Title", description="Title: "),
-        web.form.Dropdown('Tags', args=model.get_tag_list_tuple(), description='Tags: ', multiple=True),
+        web.form.Dropdown('Tags', args=(1,'dummy',), description='Tags: ', multiple=True),
         web.form.Textbox("AddTags", description="Add Tags: "),
-        web.form.Dropdown('Status', args=model.get_status_list_tuple(), description='Status: '),
+        web.form.Dropdown('Status', args=(1,'dummy',), description='Status: '),
         web.form.Button('Save'),
         web.form.Button('Cancel'),
     )
@@ -122,6 +122,9 @@ class Edit: # {{{
         EditTaskForm.Title.set_value(taskData['title'])
         EditTaskForm.Tags.set_value(taskTags)
         EditTaskForm.Status.set_value(taskData['status'])
+        # to get the new Arguments.
+        EditTaskForm.Tags.args=model.get_tag_list_tuple()
+        EditTaskForm.Status.args=model.get_status_list_tuple()
 
         return render.edit(EditTaskForm)
 

@@ -41,9 +41,13 @@ td.Title {
 }
 
 
-td.Tags {
+ul.Tags {
     font-size: 50%;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
 }
+
 
 td.ID {
     text-align: center;
