@@ -30,12 +30,20 @@ Button {
 }
 
 .NewTask {
-    text-align: left;
+    float: left;
     border: 1pt solid blue;
 }
 
+p.TaskTable {
+    float: left;
+    width: 100%;
+}
+p.Bottom {
+    float: left;
+}
+
 .TaskFilter {
-    text-align: right;
+    float: right;
     border: 1pt solid blue;
 }
 

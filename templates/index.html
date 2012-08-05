@@ -1,5 +1,6 @@
 $def with (NewTaskForm, DeleteTaskForm, StatusTaskForm, DoneTaskForm, FilterForm, Tasks, Tags)
 
+<p class="Head">
 <div class='NewTask'>
     <form action="/new" method="POST">
         $:NewTaskForm.render_css()
@@ -10,9 +11,9 @@ $def with (NewTaskForm, DeleteTaskForm, StatusTaskForm, DoneTaskForm, FilterForm
         $:FilterForm.render_css()
     </form>
 </div>
+</p>
 
-
-
+<p class="TaskTable">
 <table class="TaskTable">
 <tr class="TableHead">
     <th class="ID">ID</th>
@@ -58,6 +59,8 @@ $for task in Tasks:
     </tr>
 
 </table>
+</p>
+<p class="Bottom">
 Edit:
 <a href="/tags">Tags</a>
-
+</p>
