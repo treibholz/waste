@@ -31,7 +31,7 @@ class Index: # {{{
 
     StatusTaskForm = web.form.Form(
         web.form.Hidden('TaskID'),
-        web.form.Dropdown('Status', args=(1,'dummy',), description=''),
+        web.form.Dropdown('Status', args=(), description=''),
     )
     DoneTaskForm = web.form.Form(
         web.form.Hidden('TaskID'),
@@ -106,9 +106,9 @@ class Edit: # {{{
 
     EditTaskForm = web.form.Form(
         web.form.Textbox("Title", description="Title: "),
-        web.form.Dropdown('Tags', args=(1,'dummy',), description='Tags: ', multiple=True),
+        web.form.Dropdown('Tags', args=(), description='Tags: ', multiple=True),
         web.form.Textbox("AddTags", description="Add Tags: "),
-        web.form.Dropdown('Status', args=(1,'dummy',), description='Status: '),
+        web.form.Dropdown('Status', args=(), description='Status: '),
         web.form.Button('Save'),
         web.form.Button('Cancel'),
     )
