@@ -21,7 +21,7 @@ $def with (NewTaskForm, DeleteTaskForm, StatusTaskForm, DoneTaskForm, FilterForm
     <th class="Title">Title</th>
     <th class="Done">Done</th>
     <th class="Tags">Tags</th>
-    <th class="Delete"><img src="/files/delete.svg" width=16px alt="Delete"/></th>
+    <th class="Delete"></th>
 </tr>
 $for task in Tasks:
     $:DeleteTaskForm.TaskID.set_value(task.id)
@@ -63,4 +63,5 @@ $for task in Tasks:
 <p class="Bottom">
 Edit:
 <a href="/tags">Tags</a>
-</p>
+
+

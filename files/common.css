@@ -7,26 +7,22 @@ form{
     margin:0;
 }
 
-/*
-input#title {
-    width: 50%;
-}
-*/
-
 table.TaskTable tr.TableHead {
     background-color: blue;
     color: white;
 }
 
-
 tr.TableBody {
     background-color: #aaa;
-
 }
 
-Button {
+Button, select {
     margin: 0;
     padding: 0;
+}
+
+#DeleteButton{
+    src: url('/files/delete.svg');
 }
 
 .NewTask {
@@ -59,9 +55,23 @@ tr#Status1.TableBody {
 
 
 
-td.Title {
+td.Title{
     width: 100%;
 }
+
+
+td.Title a{
+    color: Black;
+    text-decoration: none;
+    width: 100%;
+    float: left;
+    padding-top: 5;
+    padding-bottom: 5;
+}
+td.Title a:hover{
+    background-image: url('/files/background_brightness.png');
+}
+
 
 
 ul.Tags {

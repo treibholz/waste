@@ -25,12 +25,12 @@ class Index: # {{{
 
     NewTaskForm = web.form.Form(
         web.form.Textbox("title", web.form.notnull, description="New: ", placeholder="Add a new Task"),
-        web.form.Textbox("tags", description='', placeholder="Tags, comma-separated"),
+        web.form.Textbox("tags", description='', placeholder="Tag, comma, ..."),
         web.form.Button('Add'),
     )
 
     DeleteTaskForm = web.form.Form(
-        web.form.Button('TaskID', html='<img src="/files/delete.svg" height=16px alt="Delete"/>'),
+        web.form.Button('TaskID', html='Delete'),
     )
 
     StatusTaskForm = web.form.Form(
@@ -43,9 +43,9 @@ class Index: # {{{
     )
 
     FilterForm = web.form.Form(
-        web.form.Textbox("TagFilter", description="Filter Tags: "),
-        web.form.Button("AddTagFilter", hidden=True),
-        web.form.Button("ClearTagFilter", html='<img src="/files/clearfilter.svg" height=16px alt="Clear"/>', value=True),
+        web.form.Textbox("TagFilter", description="", placeholder="Tag1, tag2, ..."),
+        web.form.Button("AddTagFilter", html='Filter'),
+        web.form.Button("ClearTagFilter", html='Clear', value=True),
     )
 
     def GET(self):
@@ -58,8 +58,8 @@ class Index: # {{{
         Tasks = model.get_tasks(model.get_taskorder(), model.get_taskfilter())
         Tags  = model.get_task_tags(model.get_taskfilter())
 
-        StatusTaskForm.Status.args=model.get_status_list_tuple()
-        FilterForm.TagFilter.value=model.get_tag_filter()
+        StatusTaskForm.Status.args      =   model.get_status_list_tuple()
+        FilterForm.TagFilter.value      =   model.get_tag_filter()
 
         return render.index(
             NewTaskForm,
