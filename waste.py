@@ -21,7 +21,7 @@ class Client(object): # {{{
 
 class Display(object): # {{{
     """docstring for Display"""
-    def __init__(self, separator=' | '):
+    def __init__(self, separator='|'):
         super(Display, self).__init__()
         self.__items = ('id', 'title', 'status', )
         self.__separator = separator
@@ -37,7 +37,7 @@ class Display(object): # {{{
         for i in title:
             line += '-'
         print line
-    
+
         for t in tasks:
             data = []
             for i in items:
@@ -68,7 +68,7 @@ class Display(object): # {{{
             else:
                item_format = '+'
 
-            template += '%%%s%ss%s' % (item_format, max_size_item[i], separator,)
+            template += ' %%%s%ss %s' % (item_format, max_size_item[i], separator,)
 
         return template
     # }}}
