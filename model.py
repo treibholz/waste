@@ -6,7 +6,7 @@ import time
 db = web.database(dbn='sqlite', db='waste.db')
 
 task_where = {
-    'Status' : ( '(status >= $task_where["Status"][1] or modified >= strftime("%s","now") - 86400 )', 0, ),
+    'Status' : ( '(Tasks.status >= $task_where["Status"][1] or Tasks.modified >= strftime("%s","now") - 86400 )', 0, ),
     'Tags' : None,
 }
 
@@ -176,7 +176,7 @@ def set_status(task_ID,Status): # {{{
         status_id = int(Status)
     except:
         status_id = status(Status)
-    
+
     db.update('Tasks', where='id = %s' % (task_ID,) , status=status_id, modified=now())
 
 # }}}
@@ -262,7 +262,7 @@ def get_single_task(task): # {{{
 
 def api_get_tasks(order='id', taskFilter=None): # {{{
     task_list = []
-    tasks = db.select('Tasks', order=order, where=taskFilter, vars=globals()).list()
+    tasks = db.select('Tasks, Status', what='Tasks.*,Status.name as StatusName', order=order, where=taskFilter + ' and Tasks.Status=Status.ID', vars=globals()).list()
 
     # There must be a better way for the following...
     for t in tasks:
