@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import urllib2
+import sys
 
 class Client(object): # {{{
     """docstring for client"""
@@ -14,8 +15,17 @@ class Client(object): # {{{
     def get_tasks(self):
         """docstring for get_tasks"""
 
-        url = '%s/get_tasks' % (self.api_url, )
+        url = '%s/api/get_tasks' % (self.api_url, )
         self.tasks = eval(urllib2.urlopen(url).read())
+
+    def add_task(self,title,tags=''):
+        """docstring for add_task"""
+
+        url = '%s/new' % (self.api_url, )
+        
+        data = 'title=%s&tags=%s' % (title, tags,)
+        
+        urllib2.urlopen(url, data)
 
 # }}}
 
@@ -52,7 +62,8 @@ class Display(object): # {{{
     def __get_task_template(self,tasks): # {{{
         """docstring for get_item_sizes"""
 
-        if len(tasks) == 0: return ''
+        if len(tasks) == 0:
+            return ''
 
         items = self.__items
         separator = self.__separator
@@ -88,9 +99,24 @@ class Display(object): # {{{
 
 if __name__ == "__main__":
 
-    api_url='http://localhost:8080/api'
+    api_url='http://localhost:8080'
 
     c = Client(api_url)
+    
+    if len(sys.argv) >1:
+        command = sys.argv[1].upper()
+   
+        if command == 'ADD':
+            title = sys.argv[2]
+            
+            if len(sys.argv) > 3:
+                tags = sys.argv[3]
+            else:
+                tags = ''
+
+            c.add_task(title, tags)
+ 
+   
     d = Display()
     c.get_tasks()
     d.show_tasks(c.tasks)
