@@ -171,8 +171,13 @@ def tag_task(taskID, tagName): # {{{
 
 # }}}
 
-def set_status(task_ID,status): # {{{
-    db.update('Tasks', where='id = %s' % (task_ID,) , status=int(status), modified=now())
+def set_status(task_ID,Status): # {{{
+    try:
+        status_id = int(Status)
+    except:
+        status_id = status(Status)
+    
+    db.update('Tasks', where='id = %s' % (task_ID,) , status=status_id, modified=now())
 
 # }}}
 
