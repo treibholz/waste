@@ -232,6 +232,10 @@ class Api:
         if call.lower() == 'get_tasks':
             return model.api_get_tasks(model.get_taskorder(), model.get_taskfilter())
 
+        if call.lower() == 'get_status_list':
+            status_list = [s[1] for s in model.get_status_list_tuple()]
+            return status_list
+
 app = web.application(urls, globals())
 if __name__ == "__main__":
 
