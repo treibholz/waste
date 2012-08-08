@@ -119,13 +119,13 @@ if __name__ == "__main__":
     api_url='http://localhost:8080'
 
     c = Client(api_url)
-    
+
     if len(sys.argv) >1:
         command = sys.argv[1].upper()
-   
+
         if command == 'ADD':
             title = sys.argv[2]
-            
+
             if len(sys.argv) > 3:
                 tags = sys.argv[3]
             else:
@@ -137,8 +137,8 @@ if __name__ == "__main__":
             status = command
             task_id = sys.argv[2]
             c.set_status(task_id, status)
-         
-   
+
+
     d = Display()
     c.get_tasks()
     d.show_tasks(c.tasks)
