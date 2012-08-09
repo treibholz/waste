@@ -299,8 +299,10 @@ def sync_db_post(timestamp, data):
 
     for table in data:
         for line in data[table]:
-            db.insert(table, **line)
-
+            try:
+                db.insert(table, **line)
+            except:
+                print line
 
 
 # vim:fdm=marker:ts=4:sw=4:sts=4:ai:sta:et
