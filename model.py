@@ -341,6 +341,6 @@ def sync_db_post(data, remote, timestamp=0):
     # FIXME Do something with the conflicts here...
 
 
-    db.update('Sync', timestamp=now(), where="remote = $remote", vars=locals())
+    db.update('Sync', lastsync=now(), where="remote = $remote", vars=locals())
 
 # vim:fdm=marker:ts=4:sw=4:sts=4:ai:sta:et
