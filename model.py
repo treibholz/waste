@@ -376,8 +376,10 @@ def solve_conflicts(conflict_dict): # {{{
                 r.pop('id')
                 db.update('Tasks', where="id=$l['id']", vars=locals(), **r)
         else:
-            r.pop('id')
-            db.insert('Tasks', **r)
+            RemoteID = r.pop('id')
+            x = db.insert('Tasks', **r)
+            print "XXXXX %s XXXXX" % (x,)
+            db.delete('Tasks', where='id=$RemoteID', vars=locals())
 
 # }}}
 
