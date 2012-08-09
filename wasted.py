@@ -246,9 +246,9 @@ class Sync:
         """docstring for GET"""
         return model.sync_db_get(timestamp)
 
-    def POST(self, timestamp=0):
+    def POST(self, timestamp=0, remote=False):
         data = eval(web.webapi.data())
-        model.sync_db_post(timestamp, data)
+        model.sync_db_post(data, timestamp, remote)
 
 
 class SyncAll:

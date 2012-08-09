@@ -332,7 +332,7 @@ def sync_db_post(data, remote, timestamp=0):
 
     for table in data:
         conflict_dict[table] = []
-        
+
         print "#####"
         print data
         print table
@@ -346,7 +346,7 @@ def sync_db_post(data, remote, timestamp=0):
 
     # FIXME Do something with the conflicts here...
 
-
-    db.update('Sync', lastsync=now(), where="remote = $remote", vars=locals())
+    if remote:
+        db.update('Sync', lastsync=now(), where="remote = $remote", vars=locals())
 
 # vim:fdm=marker:ts=4:sw=4:sts=4:ai:sta:et
