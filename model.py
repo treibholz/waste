@@ -295,11 +295,12 @@ def sync_db_get(timestamp):
 
     return result
 
-def sync_db_post(timestamp,data):
+def sync_db_post(timestamp, data):
 
     for table in data:
         for line in data[table]:
             try:
+                print line
                 db.insert(table, line)
             except:
                 print line
