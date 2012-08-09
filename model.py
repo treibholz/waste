@@ -325,7 +325,7 @@ def sync_db_get(timestamp):
 
     return result
 
-def sync_db_post(data, remote, timestamp=0):
+def sync_db_post(data, timestamp=0, remote=False):
 
     conflict_dict = {}
 
