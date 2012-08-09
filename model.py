@@ -285,7 +285,7 @@ def api_get_tasks(order='id', taskFilter=None): # {{{
 # Sync
 
 def sync_db_get(timestamp):
-    Tables = ('Tasks', 'Tags', 'Tagged', 'Dependencies')
+    Tables = ('Tasks', 'Tags', 'Tagged', 'Dependencies', 'Status')
     result = {}
 
     for t in Tables:
