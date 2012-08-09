@@ -329,8 +329,14 @@ def sync_db_post(data, remote, timestamp=0):
 
     conflict_dict = {}
 
+
     for table in data:
         conflict_dict[table] = []
+        
+        print "#####"
+        print data
+        print table
+        print "#####"
 
         for line in data[table]:
             try:
