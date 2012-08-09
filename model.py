@@ -353,10 +353,23 @@ def sync_db_post(data, timestamp=0, remote=False): # {{{
     print "###"
     print "###"
 
+    solve_conflicts(conflict_dict)
+
     if remote:
         db.update('Sync', lastsync=now(), where="remote = $remote", vars=locals())
 
 # }}}
 
+def solve_conflicts(conflict_dict): # {{{
+
+    for r in conflict_dict['Tasks']:
+        l = db.select('Tasks', where="id=$c['id']", vars=locals()).list()[0]
+        print l
+
+#        if r['created'] == l['created']:
+            
+
+
+# }}}
 
 # vim:fdm=marker:ts=4:sw=4:sts=4:ai:sta:et
