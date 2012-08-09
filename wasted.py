@@ -248,7 +248,7 @@ class Sync:
 
     def POST(self, timestamp=0):
 
-        data = web.webapi.data()
+        data = eval(web.webapi.data())
 
         model.sync_db_post(timestamp, data)
 
