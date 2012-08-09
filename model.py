@@ -303,8 +303,10 @@ def sync_db_post(timestamp, data):
         conflict_dict[table] = []
 
         for line in data[table]:
-            db.insert(table, **line)
-            conflict_dict[table].append(line)
+            try:
+                db.insert(table, **line)
+            except db.IntegrityError:
+                conflict_dict[table].append(line)
 
 
 # vim:fdm=marker:ts=4:sw=4:sts=4:ai:sta:et
