@@ -299,7 +299,7 @@ def sync_db_post(timestamp, data):
 
     for table in data:
         for line in data[table]:
-            db.insert(table, values=line)
+            db.insert(table, **line)
 
 
 
