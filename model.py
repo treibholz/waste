@@ -363,8 +363,13 @@ def sync_db_post(data, timestamp=0, remote=False): # {{{
 def solve_conflicts(conflict_dict): # {{{
 
     for r in conflict_dict['Tasks']:
-        l = db.select('Tasks', where="id=$c['id']", vars=locals()).list()[0]
+        l = db.select('Tasks', where="id=$r['id']", vars=locals()).list()[0]
+        print "---"
+        print "---"
+        print r
         print l
+        print "---"
+        print "---"
 
 #        if r['created'] == l['created']:
             
