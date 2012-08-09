@@ -254,7 +254,8 @@ class Sync:
 class SyncAll:
 
     def GET(self):
-        return model.sync_all_remote()
+        model.sync_all_remote()
+        raise web.seeother('/')
 
 app = web.application(urls, globals())
 if __name__ == "__main__":

@@ -285,10 +285,12 @@ def api_get_tasks(order='id', taskFilter=None): # {{{
 
 # Sync
 
-def sync_add_remote(url):
+def sync_add_remote(url): # {{{
     db.insert('Sync', remote=url, lastsync=0)
 
-def sync_all_remote():
+# }}}
+
+def sync_all_remote(): # {{{
     output = ''
     for entry in db.select('Sync').list():
         url = '%s/%s' % (entry['remote'], entry['lastsync'], )
@@ -298,7 +300,9 @@ def sync_all_remote():
 
     return output
 
-def sync_to(url, timestamp=0):
+# }}}
+
+def sync_to(url, timestamp=0): # {{{
 
     data = unicode(sync_db_get(timestamp))
 
@@ -306,16 +310,19 @@ def sync_to(url, timestamp=0):
 
     return url
 
-def sync_from(remote, timestamp):
+# }}}
+
+def sync_from(remote, timestamp): # {{{
     url = '%s/%s' % (remote, timestamp, )
 
     data = eval(urllib2.urlopen(url).read())
     sync_db_post(data, remote)
 
     return url
+# }}}
 
-def sync_db_get(timestamp):
-    Tables = ('Tasks', 'Tags', 'Dependencies', 'Status')
+def sync_db_get(timestamp): # {{{
+    Tables = ('Tasks', 'Tags', 'Dependencies', 'Tagged', 'Status')
     result = {}
 
     for t in Tables:
@@ -324,19 +331,14 @@ def sync_db_get(timestamp):
         result[t] = db2list(db_output)
 
     return result
+# }}}
 
-def sync_db_post(data, timestamp=0, remote=False):
+def sync_db_post(data, timestamp=0, remote=False): # {{{
 
     conflict_dict = {}
 
-
     for table in data:
         conflict_dict[table] = []
-
-        print "#####"
-        print data
-        print table
-        print "#####"
 
         for line in data[table]:
             try:
@@ -346,8 +348,12 @@ def sync_db_post(data, timestamp=0, remote=False):
 
     # FIXME Do something with the conflicts here...
 
+    print conflict_dict
+
     if remote:
-        print "foo" 
         db.update('Sync', lastsync=now(), where="remote = $remote", vars=locals())
+
+# }}}
+
 
 # vim:fdm=marker:ts=4:sw=4:sts=4:ai:sta:et
