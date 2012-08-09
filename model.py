@@ -380,6 +380,7 @@ def solve_conflicts(conflict_dict): # {{{
             db.delete('Tasks', where='id=$RemoteID', vars=locals())
             x = db.insert('Tasks', **r)
             print "XXXXX %s XXXXX" % (x,)
+            l.pop(RemoteID)
             x = db.insert('Tasks', **l)
             print "XXXXX %s XXXXX" % (x,)
 
