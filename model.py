@@ -377,7 +377,7 @@ def solve_conflicts(conflict_dict): # {{{
                 db.update('Tasks', where="id=$l['id']", vars=locals(), **r)
         else:
             r.pop('id')
-            db.insert('Tasks', where="id=$l['id']", vars=locals(), **r)
+            db.insert('Tasks', vars=locals(), **r)
 
 # }}}
 
