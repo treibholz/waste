@@ -347,8 +347,11 @@ def sync_db_post(data, timestamp=0, remote=False): # {{{
                 conflict_dict[table].append(line)
 
     # FIXME Do something with the conflicts here...
-
+    print "###"
+    print "###"
     print conflict_dict
+    print "###"
+    print "###"
 
     if remote:
         db.update('Sync', lastsync=now(), where="remote = $remote", vars=locals())
