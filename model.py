@@ -2,6 +2,7 @@
 
 import web
 import time
+import urllib2
 
 db = web.database(dbn='sqlite', db='waste.db')
 
@@ -284,8 +285,37 @@ def api_get_tasks(order='id', taskFilter=None): # {{{
 
 # Sync
 
+def sync_add_remote(url):
+    db.insert('Sync', remote=url, lastsync=0)
+
+def sync_all_remote():
+    output = ''
+    for entry in db.select('Sync').list():
+        url = '%s/%s' % (entry['remote'], entry['lastsync'], )
+        sync_from(entry['remote'], entry['lastsync'])
+        sync_to(url, entry['lastsync'])
+        output = "Synchronised with: %s at %s \n" % (entry['remote'] , now())
+
+    return output
+
+def sync_to(url, timestamp=0):
+
+    data = unicode(sync_db_get(timestamp))
+
+    urllib2.urlopen(url, data).read()
+
+    return url
+
+def sync_from(remote, timestamp):
+    url = '%s/%s' % (remote, timestamp, )
+
+    data = eval(urllib2.urlopen(url).read())
+    sync_db_post(data, remote)
+
+    return url
+
 def sync_db_get(timestamp):
-    Tables = ('Tasks', 'Tags', 'Tagged', 'Dependencies', 'Status')
+    Tables = ('Tasks', 'Tags', 'Dependencies', 'Status')
     result = {}
 
     for t in Tables:
@@ -295,7 +325,7 @@ def sync_db_get(timestamp):
 
     return result
 
-def sync_db_post(timestamp, data):
+def sync_db_post(data, remote, timestamp=0):
 
     conflict_dict = {}
 
@@ -308,6 +338,9 @@ def sync_db_post(timestamp, data):
             except:
                 conflict_dict[table].append(line)
 
+    # FIXME Do something with the conflicts here...
 
+
+    db.update('Sync', timestamp=now(), where="remote = $remote", vars=locals())
 
 # vim:fdm=marker:ts=4:sw=4:sts=4:ai:sta:et

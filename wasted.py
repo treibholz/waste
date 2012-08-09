@@ -18,6 +18,7 @@ urls = (
     '/favicon.ico',     'Favicon',
     '/api/(.*)',        'Api',
     '/sync/(.*)',       'Sync',
+    '/syncall',         'SyncAll',
 )
 
 render = web.template.render('templates', base='base',)
@@ -243,16 +244,17 @@ class Sync:
 
     def GET(self, timestamp=0):
         """docstring for GET"""
-
         return model.sync_db_get(timestamp)
 
     def POST(self, timestamp=0):
-
         data = eval(web.webapi.data())
-
         model.sync_db_post(timestamp, data)
 
 
+class SyncAll:
+
+    def GET(self):
+        return model.sync_all_remote()
 
 app = web.application(urls, globals())
 if __name__ == "__main__":
