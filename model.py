@@ -309,4 +309,5 @@ def sync_db_post(timestamp, data):
                 conflict_dict[table].append(line)
 
 
+
 # vim:fdm=marker:ts=4:sw=4:sts=4:ai:sta:et
