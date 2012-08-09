@@ -7,7 +7,7 @@ import urllib2
 db = web.database(dbn='sqlite', db='waste.db')
 
 task_where = {
-    'Status' : ( '(Tasks.status >= $task_where["Status"][1] or Tasks.modified >= strftime("%s","now") - 86400 )', 0, ),
+    'Status' : ( '(Tasks.status >= $task_where["Status"][1] or Tasks.modified >= strftime("%s","now") - 86400 ) and Tasks.deleted = 0', 0, ),
     'Tags' : None,
 }
 
@@ -56,16 +56,16 @@ def get_tasks(order='id', taskFilter=None): # {{{
 # }}}
 
 def get_tags(order='id'): # {{{
-    return db.select('Tags', order=order)
+    return db.select('Tags', order=order, where='deleted = 0')
 
 # }}}
 
 def get_task_tags(taskFilter=None): # {{{
-    tasklist = [ t['id'] for t in db.select('Tasks',what='id').list() ]
+    tasklist = [ t['id'] for t in db.select('Tasks', what='id', where='deleted = 0').list() ]
     taskdict = {}
     for t in tasklist:
-        taskTags = db.select('Tags', what="Name", where="id in (select tag from Tagged where task = %s )" % (t,)).list()
-        taskTags = [ tag['name'] for tag in taskTags] 
+        taskTags = db.select('Tags', what="Name", where="id in (select tag from Tagged where task = $t and deleted = 0)", vars=locals()).list()
+        taskTags = [ tag['name'] for tag in taskTags]
 
         taskdict[t] = taskTags
 
@@ -74,12 +74,12 @@ def get_task_tags(taskFilter=None): # {{{
 # }}}
 
 def get_tag_tasks(): # {{{
-    taglist = [ t['id'] for t in db.select('Tags',what='id').list() ]
+    taglist = [ t['id'] for t in db.select('Tags', what='id', where='deleted = 0').list() ]
     tagdict = {}
 
     for t in taglist:
-        tagTasks = db.select('Tagged', what="task", where="tag = %s " % (t,)).list()
-        tagTasks = [ task['task'] for task in tagTasks] 
+        tagTasks = db.select('Tagged', what="task", where="tag = $t and deleted = 0", vars=locals()).list()
+        tagTasks = [ task['task'] for task in tagTasks]
 
         tagdict[t] = tagTasks
 
@@ -88,8 +88,8 @@ def get_tag_tasks(): # {{{
 # }}}
 
 def get_task_tag_ids(t): # {{{
-    taskTags = db.select('Tagged', what = "tag", where="task = %s " % (t,)).list()
-    taskTags = [ tag['tag'] for tag in taskTags] 
+    taskTags = db.select('Tagged', what = "tag", where="task = $t and deleted=0", vars=locals()).list()
+    taskTags = [ tag['tag'] for tag in taskTags]
 
     return taskTags
 
@@ -97,7 +97,7 @@ def get_task_tag_ids(t): # {{{
 
 def get_status_list_tuple(order='id'): # {{{
     statuslist = []
-    result = db.select('Status', what='id, name', order=order)
+    result = db.select('Status', what='id, name', where='deleted=0', order=order)
     for s in result:
         statuslist.append(tuple(s.values()))
     return statuslist
@@ -105,7 +105,7 @@ def get_status_list_tuple(order='id'): # {{{
 
 def get_tag_list_tuple(order='id'): # {{{
     taglist = []
-    result = db.select('Tags', what="id,name", order=order)
+    result = db.select('Tags', what="id,name", where="deleted=0" , order=order)
     for s in result:
         taglist.append(tuple(s.values()))
     return taglist
@@ -139,7 +139,8 @@ def update_task(TaskID, EditTaskForm, TagIDs): # {{{
     newTags = [ x.strip() for x in EditTaskForm.d.AddTags.split(',') ]
 
     if TagIDs != []:
-        db.delete('Tagged', where="task = %s" % TaskID )
+        #db.delete('Tagged', where="task = %s" % TaskID )
+        db.update('Tagged', where="task = $TaskID",modified=now(), deleted=now(), vars=locals() )
         for t in TagIDs:
             tag_task(TaskID, t)
 
@@ -167,6 +168,7 @@ def tag_task(taskID, tagName): # {{{
 
     db.insert('Tagged',
         modified = now(),
+        created = now(),
         task=taskID,
         tag=tagID)
 
@@ -183,28 +185,31 @@ def set_status(task_ID,Status): # {{{
 # }}}
 
 def add_status(status): # {{{
-    db.insert('Status', name=status, modified=now()) 
+    db.insert('Status', name=status, modified=now(), created=now()) 
 
 # }}}
 
 def add_priority(priority): # {{{
-    db.insert('Priority', name=priority)
+    db.insert('Priority', name=priority, modified=now(), created=now())
 
 # }}}
 
 def add_tag(tag): # {{{
-    db.insert('Tags', name=tag)
+    db.insert('Tags', name=tag, modified=now(), created=now())
 
 # }}}
 
 def delete_task(task_ID): # {{{
-    db.delete('Tasks', where='id = %s' % (task_ID, ))
+    #db.delete('Tasks', where='id = %s' % (task_ID, ))
+    db.update('Tasks', where='id = $task_ID', modified=now(), deleted=now(), vars=locals())
 
 # }}}
 
 def delete_tag(tag_ID): # {{{
-    db.delete('Tags', where='id = %s' % (tag_ID, ))
-    db.delete('Tagged', where='task = %s' % (tag_ID, ))
+    #db.delete('Tags', where='id = %s' % (tag_ID, ))
+    db.update('Tags', where='id = $tag_ID', deleted=now(), modified=now(), vars=locals())
+    #db.delete('Tagged', where='task = %s' % (tag_ID, ))
+    db.update('Tagged', where='task = $tag_ID', deleted=now(), modified=now(), vars=locals())
 
 # }}}
 
@@ -226,7 +231,7 @@ def set_tag_filter(TagFilter): # {{{
     taglist = []
     for tag in TagFilterList:
         try:
-            taglist.append(db.select('Tags',what='id', where='name like $tag', vars=locals()).list()[0]['id'])
+            taglist.append(db.select('Tags',what='id', where='name like $tag and deleted=0', vars=locals()).list()[0]['id'])
         except:
             # EVIL
             pass
@@ -243,7 +248,7 @@ def get_tag_filter(): # {{{
     result = ''
 
     if task_where['Tags'] != None:
-        for t in db.select('Tags', what='name', where='id in $task_where["Tags"][1]', vars=globals()):
+        for t in db.select('Tags', what='name', where='id in $task_where["Tags"][1] and deleted=0', vars=globals()):
             result += '%s, ' % t['name']
 
     return result
@@ -255,7 +260,7 @@ def get_taskorder(): # {{{
 # }}}
 
 def get_single_task(task): # {{{
-        return db.select('Tasks', where="id=%s" % task).list()[0]
+        return db.select('Tasks', where="id=$task", vars=locals()).list()[0]
 
 # }}}
 
@@ -376,8 +381,7 @@ def solve_conflicts(conflict_dict): # {{{
                 r.pop('id')
                 db.update('Tasks', where="id=$l['id']", vars=locals(), **r)
         else:
-            RemoteID = r['id']
-            db.delete('Tasks', where='id=$RemoteID', vars=locals())
+            db.delete('Tasks', where='id=$r["id"]', vars=locals())
             x = db.insert('Tasks', **r)
             print "XXXXX %s XXXXX" % (x,)
             l.pop('id')
