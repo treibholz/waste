@@ -371,9 +371,10 @@ def solve_conflicts(conflict_dict): # {{{
         print "---"
         print "---"
 
-#        if r['created'] == l['created']:
-            
-
+        if r['created'] == l['created']:
+            if l['modified'] < r['modified']:
+                r.pop('id')
+                db.update('Tasks', where="id=$l['id']", vars=locals(), **r)
 
 # }}}
 
