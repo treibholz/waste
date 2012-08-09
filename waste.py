@@ -55,11 +55,11 @@ class Display(object): # {{{
 
     def show_tasks(self, tasks):
         """docstring for show_tasks"""
-        
+
         if len(tasks) == 0:
             print "no Tasks. Jippie!"
             return True
-        
+
         items = self.__items
         template = self.__get_task_template(tasks)
 

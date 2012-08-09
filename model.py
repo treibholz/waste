@@ -258,20 +258,52 @@ def get_single_task(task): # {{{
 
 # }}}
 
+def db2list(db_output): # {{{
+    # There must be a better way for the following...
+    db_list = []
+
+    for i in db_output:
+        i_dict={}
+        for k in i:
+            i_dict[k] = i[k]
+        db_list.append(i_dict)
+
+    return db_list
+
+# }}}
+
 # API
 
 def api_get_tasks(order='id', taskFilter=None): # {{{
-    task_list = []
+
     tasks = db.select('Tasks, Status', what='Tasks.*,Status.name as StatusName', order=order, where=taskFilter + ' and Tasks.Status=Status.ID', vars=globals()).list()
 
-    # There must be a better way for the following...
-    for t in tasks:
-        t_dict={}
-        for k in t:
-            t_dict[k] = t[k]
-        task_list.append(t_dict)
-
-    return task_list
+    return db2list(tasks)
 
 # }}}
+
+# Sync
+
+def sync_db_get(timestamp):
+    Tables = ('Tasks', 'Tags', 'Tagged', 'Dependencies')
+    result = {}
+
+    for t in Tables:
+        db_output = db.select(t, where="modified >= $timestamp", vars=locals())
+
+        result[t] = db2list(db_output)
+
+    return result
+
+def sync_db_post(timestamp,data):
+
+    for table in data:
+        for line in data[table]:
+            try:
+                db.insert(table, line)
+            except:
+                print line
+
+
+
 # vim:fdm=marker:ts=4:sw=4:sts=4:ai:sta:et

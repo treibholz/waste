@@ -17,6 +17,7 @@ urls = (
     '/tags/update',     'Tags_update',
     '/favicon.ico',     'Favicon',
     '/api/(.*)',        'Api',
+    '/sync/(.*)',       'Sync',
 )
 
 render = web.template.render('templates', base='base',)
@@ -225,7 +226,7 @@ class Favicon: # {{{
         return open('files/favicon.ico' ).read()
 # }}}
 
-class Api:
+class Api: # {{{
 
     def GET(self, call):
 
@@ -235,6 +236,23 @@ class Api:
         if call.lower() == 'get_status_list':
             status_list = [s[1] for s in model.get_status_list_tuple()]
             return status_list
+
+# }}}
+
+class Sync:
+
+    def GET(self, timestamp=0):
+        """docstring for GET"""
+
+        return model.sync_db_get(timestamp)
+
+    def POST(self, timestamp=0):
+
+        data = web.webapi.data()
+
+        model.sync_db_post(timestamp, data)
+
+
 
 app = web.application(urls, globals())
 if __name__ == "__main__":
