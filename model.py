@@ -65,7 +65,7 @@ def get_task_tags(taskFilter=None): # {{{
     taskdict = {}
     for t in tasklist:
         taskTags = db.select('Tags', what="Name", where="id in (select tag from Tagged where task = $t and deleted = 0)", vars=locals()).list()
-        taskTags = [ tag['name'] for tag in taskTags]
+        taskTags = [ tag['name'] for tag in taskTags ]
 
         taskdict[t] = taskTags
 
@@ -88,7 +88,12 @@ def get_tag_tasks(): # {{{
 # }}}
 
 def get_task_tag_ids(t): # {{{
-    taskTags = db.select('Tagged', what = "tag", where="task = $t and deleted=0", vars=locals()).list()
+    taskTags = db.select(   'Tagged',
+                            what = "tag",
+                            where="task = $t and deleted=0",
+                            vars=locals()
+                        ).list()
+
     taskTags = [ tag['tag'] for tag in taskTags]
 
     return taskTags
@@ -134,14 +139,25 @@ def update_task(TaskID, EditTaskForm, TagIDs): # {{{
                 title = EditTaskForm.d.Title,
                 modified = now(),
                 status = EditTaskForm.d.Status,
-                where = 'ID = %s' % TaskID)
+                where = 'ID = $TaskID',
+                vars=locals())
 
     newTags = [ x.strip() for x in EditTaskForm.d.AddTags.split(',') ]
 
+    oldTags = get_task_tag_ids(TaskID)
+
+    addTags = list(set(TagIDs)  - set(oldTags))
+    delTags = list(set(oldTags) - set(TagIDs))
+    delTags = delTags # for vim...
+
+    print newTags
+    print oldTags
+
     if TagIDs != []:
         #db.delete('Tagged', where="task = %s" % TaskID )
-        db.update('Tagged', where="task = $TaskID",modified=now(), deleted=now(), vars=locals() )
-        for t in TagIDs:
+        db.update('Tagged', where="task = $TaskID and tag in $delTags and deleted=0", modified=now(), deleted=now(), vars=locals() )
+
+        for t in addTags:
             tag_task(TaskID, t)
 
     if newTags != ['']:
@@ -165,12 +181,15 @@ def tag_task(taskID, tagName): # {{{
         tagID = tag(tagName)
     else:
         tagID = tagName
-
-    db.insert('Tagged',
-        modified = now(),
-        created = now(),
-        task=taskID,
-        tag=tagID)
+    try:
+        db.insert('Tagged',
+            modified = now(),
+            created = now(),
+            task=taskID,
+            tag=tagID)
+    except:
+        #evil...
+        pass
 
 # }}}
 
