@@ -305,7 +305,7 @@ def sync_db_post(timestamp, data):
         for line in data[table]:
             try:
                 db.insert(table, **line)
-            except db.IntegrityError:
+            except:
                 conflict_dict[table].append(line)
 
 
