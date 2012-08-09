@@ -297,12 +297,14 @@ def sync_db_get(timestamp):
 
 def sync_db_post(timestamp, data):
 
+    conflict_dict = {}
+
     for table in data:
+        conflict_dict[table] = []
+
         for line in data[table]:
-            try:
-                db.insert(table, **line)
-            except:
-                print line
+            db.insert(table, **line)
+            conflict_dict[table].append(line)
 
 
 # vim:fdm=marker:ts=4:sw=4:sts=4:ai:sta:et
