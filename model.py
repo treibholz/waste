@@ -321,7 +321,7 @@ def sync_from(remote, timestamp): # {{{
     url = '%s/%s' % (remote, timestamp, )
 
     data = eval(urllib2.urlopen(url).read())
-    sync_db_post(data, remote)
+    sync_db_post(data, timestamp, remote)
 
     return url
 # }}}
@@ -360,7 +360,9 @@ def sync_db_post(data, timestamp=0, remote=False): # {{{
 
     solve_conflicts(conflict_dict)
 
+    print remote
     if remote:
+        print remote
         db.update('Sync', lastsync=now(), where="remote = $remote", vars=locals())
 
 # }}}
