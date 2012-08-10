@@ -1,33 +1,41 @@
 waste
 =====
 
-This will become a useable todo-manager.
+This will become the first useable todo-manager.
 
 ...as soon as I find the time...
 
 It is under heavy development. The database-schema is not stable yet.
 
+waste is written in Python and uses web.py, currently developped and tested on Debian Squeeze and Wheezy.
+
+
 Features
 --------
 
-* a colorful WebUI
+* an ugly, but colorful WebUI
+* poor database-design.
+* a very basic CLI client
 * free defineable tags. As many tags as the DBMS (sqlite3 atm.) can handle
 * free defineable status. Also as many as the DMBS can handle.
 * a tagfilter
+* everything is UTF-8
+* ALPHA! stateless synchronisation between instances, so you can use it on any machine, offline or online.
+
 
 Planned Features
 ----------------
 
-* a (colorful) CLI
-* stateless synchronisation between instances, so you can use it on any machine, offline or online
+* a full featured (and colorful!) CLI
 * dependencies between tasks
+* Documentation :-)
 
 Features I dream about
 ----------------------
-Stuff, maybe sombody else should do it...
+Maybe sombody else should do it...
 
 * A client for Android
-* Integration in the "Awesome" Windowmanager
+* Integration in the "Awesome" windowmanager
 
 Features I can not add
 ----------------------
