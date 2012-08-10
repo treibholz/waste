@@ -121,7 +121,7 @@ class Edit: # {{{
 
     EditTaskForm = web.form.Form(
         web.form.Textbox("Title", web.form.notnull, description="Title: "),
-        web.form.Dropdown('Tags', args=(), description='Tags: ', multiple=True),
+        web.form.Dropdown('Tags', args=(), description='Tags: ', multiple=True, size=10,),
         web.form.Textbox("AddTags", description="Add Tags: "),
         web.form.Dropdown('Status', args=(), description='Status: '),
         web.form.Button('Save'),
