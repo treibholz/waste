@@ -346,7 +346,7 @@ def sync_from(remote, timestamp): # {{{
 # }}}
 
 def sync_db_get(timestamp): # {{{
-    Tables = ('Tasks', 'Tags', 'Dependencies', 'Tagged', 'Status')
+    Tables = ('Tasks', 'Tags', 'Dependencies', 'Tagged', 'Status', 'Priotity')
     result = {}
 
     for t in Tables:
