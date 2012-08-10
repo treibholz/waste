@@ -39,7 +39,7 @@ def status(title): # {{{
 # }}}
 
 def tag(title): # {{{
-    dbresult = db.select('Tags', where="name like '%s'" % (title,)).list()
+    dbresult = db.select('Tags', where="name like $title and deleted=0", vars=locals()).list()
     if len(dbresult) == 0:
         add_tag(title)
         result = tag(title)
@@ -392,34 +392,12 @@ def solve_conflicts(conflict_dict): # {{{
                     db.update(table, where="id=$l['id']", vars=locals(), **r)
             else:
                 db.delete(table, where='id=$r["id"]', vars=locals())
-                x = db.insert(table, **r)
+                db.insert(table, **r)
                 l.pop('id')
-                x = db.insert(table, **l)
+                db.insert(table, **l)
 
-    # Tables without IDs
-    for table in ('Tagged',):
-        for r in conflict_dict[table]:
-            l = db.select(table, where="id=$r['id']", vars=locals()).list()[0]
-            print "---"
-            print "---"
-            print r
-            print l
-            print "---"
-            print "---"
+    # Tables without IDs don't need this.
 
-            if r['created'] == l['created']:
-                if l['modified'] < r['modified']:
-                    r.pop('id')
-                    db.update(table, where="id=$l['id']", vars=locals(), **r)
-            else:
-                db.delete(table, where='id=$r["id"]', vars=locals())
-                x = db.insert(table, **r)
-                print "XXXXX %s XXXXX" % (x,)
-                l.pop('id')
-                x = db.insert(table, **l)
-                print "XXXXX %s XXXXX" % (x,)
-
-#
 # }}}
 
 # vim:fdm=marker:ts=4:sw=4:sts=4:ai:sta:et
