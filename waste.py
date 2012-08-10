@@ -23,26 +23,27 @@ class Client(object): # {{{
 
         url = '%s/api/get_status_list' % (self.api_url, )
         return eval(urllib2.urlopen(url).read())
-        
+
 
     def add_task(self,title,tags=''):
         """docstring for add_task"""
-
         url = '%s/new' % (self.api_url, )
-        
         data = 'title=%s&tags=%s' % (title, tags,)
-        
         urllib2.urlopen(url, data)
 
-    
     def set_status(self,task_id, Status):
         """docstring for set_status"""
 
         url = '%s/status' % (self.api_url, )
-        
         data = 'TaskID=%s&Status=%s' % (task_id, Status,)
-        
         urllib2.urlopen(url, data)
+
+    def sync(self):
+        """docstring for set_status"""
+
+        url = '%s/syncall' % (self.api_url, )
+        urllib2.urlopen(url)
+
 
 # }}}
 
@@ -132,8 +133,10 @@ if __name__ == "__main__":
                 tags = ''
 
             c.add_task(title, tags)
+        elif command == 'SYNC':
+            c.sync()
 
-        if command in [ status.upper() for status in c.get_status_list() ]:
+        elif command in [ status.upper() for status in c.get_status_list() ]:
             status = command
             task_id = sys.argv[2]
             c.set_status(task_id, status)
