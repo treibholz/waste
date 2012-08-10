@@ -370,13 +370,6 @@ def sync_db_post(data, timestamp=0, remote=False): # {{{
             except:
                 conflict_dict[table].append(line)
 
-    # FIXME Do something with the conflicts here...
-    print "###"
-    print "###"
-    print conflict_dict
-    print "###"
-    print "###"
-
     solve_conflicts(conflict_dict)
 
     print remote
@@ -388,7 +381,23 @@ def sync_db_post(data, timestamp=0, remote=False): # {{{
 
 def solve_conflicts(conflict_dict): # {{{
 
+    # Tables with IDs
     for table in ('Tasks', 'Tags', 'Status', 'Priority'):
+        for r in conflict_dict[table]:
+            l = db.select(table, where="id=$r['id']", vars=locals()).list()[0]
+
+            if r['created'] == l['created']:
+                if l['modified'] < r['modified']:
+                    r.pop('id')
+                    db.update(table, where="id=$l['id']", vars=locals(), **r)
+            else:
+                db.delete(table, where='id=$r["id"]', vars=locals())
+                x = db.insert(table, **r)
+                l.pop('id')
+                x = db.insert(table, **l)
+
+    # Tables without IDs
+    for table in ('Tagged',):
         for r in conflict_dict[table]:
             l = db.select(table, where="id=$r['id']", vars=locals()).list()[0]
             print "---"
@@ -410,6 +419,7 @@ def solve_conflicts(conflict_dict): # {{{
                 x = db.insert(table, **l)
                 print "XXXXX %s XXXXX" % (x,)
 
+#
 # }}}
 
 # vim:fdm=marker:ts=4:sw=4:sts=4:ai:sta:et
