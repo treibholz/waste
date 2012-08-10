@@ -51,7 +51,7 @@ class Display(object): # {{{
     """docstring for Display"""
     def __init__(self, separator='|'):
         super(Display, self).__init__()
-        self.__items = ('id', 'title', 'StatusName', )
+        self.__items = ('id', 'title', 'State', )
         self.__separator = separator
 
     def show_tasks(self, tasks):

@@ -301,7 +301,7 @@ def db2list(db_output): # {{{
 
 def api_get_tasks(order='Task.ID', taskFilter=None): # {{{
 
-    tasks = db.select('Tasks, Status', what='Tasks.*,Status.name as StatusName', order=order, where=taskFilter + ' and Tasks.Status=Status.ID', vars=globals()).list()
+    tasks = db.select('Tasks, Status', what='Tasks.*,Status.name as State', order=order, where=taskFilter + ' and Tasks.Status=Status.ID', vars=globals()).list()
 
     return db2list(tasks)
 
