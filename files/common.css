@@ -27,20 +27,21 @@ Button, select {
 
 .NewTask {
     float: left;
-    border: 1pt solid blue;
+}
+.Bottom {
+    float: left;
+    /* border: 1pt solid blue; */
+    list-style-type: none;
 }
 
-p.TaskTable {
+
+.TaskTable {
     float: left;
     width: 100%;
-}
-p.Bottom {
-    float: left;
 }
 
 .TaskFilter {
     float: right;
-    border: 1pt solid blue;
 }
 
 tr#Status-1.TableBody {
