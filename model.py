@@ -100,7 +100,7 @@ def get_task_tag_ids(t): # {{{
 
 # }}}
 
-def get_status_list_tuple(order='id'): # {{{
+def get_status_list_tuple(order='Status.id'): # {{{
     statuslist = []
     result = db.select('Status', what='id, name', where='deleted=0', order=order)
     for s in result:
@@ -108,7 +108,7 @@ def get_status_list_tuple(order='id'): # {{{
     return statuslist
 # }}}
 
-def get_tag_list_tuple(order='id'): # {{{
+def get_tag_list_tuple(order='Tags.id'): # {{{
     taglist = []
     result = db.select('Tags', what="id,name", where="deleted=0" , order=order)
     for s in result:
@@ -256,7 +256,7 @@ def set_tag_filter(TagFilter): # {{{
             pass
 
     if taglist != []:
-        task_where['Tags'] = ( "id in (select task from Tagged where tag in $task_where['Tags'][1])", taglist, )
+        task_where['Tags'] = ( "Tasks.id in (select task from Tagged where tag in $task_where['Tags'][1])", taglist, )
     else:
         task_where['Tags'] = None
 
@@ -299,7 +299,7 @@ def db2list(db_output): # {{{
 
 # API
 
-def api_get_tasks(order='id', taskFilter=None): # {{{
+def api_get_tasks(order='Task.ID', taskFilter=None): # {{{
 
     tasks = db.select('Tasks, Status', what='Tasks.*,Status.name as StatusName', order=order, where=taskFilter + ' and Tasks.Status=Status.ID', vars=globals()).list()
 
