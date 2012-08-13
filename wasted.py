@@ -184,7 +184,8 @@ class Tags: # {{{
             Tags,
             DeleteTagForm,
             EditTagForm,
-            usedTags)
+            usedTags,
+            path)
 
 # }}}
 

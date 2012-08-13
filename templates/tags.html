@@ -1,4 +1,4 @@
-$def with (Tags, DeleteTagForm, EditTagForm, usedTags)
+$def with (Tags, DeleteTagForm, EditTagForm, usedTags, path)
 
 <table class="TaskTable">
 <tr class="TableHead">
@@ -16,20 +16,20 @@ $for tag in Tags:
         <td class="ID">$tag.id</td>
 
         <td class="Delete">
-            <form action="/tags/delete" method="POST">$:DeleteTagForm.render_css()</form>
+            <form action="delete" method="POST">$:DeleteTagForm.render_css()</form>
         </td>
 
         <td class="Name">
-            <form action="/tags/update" method="POST">$:EditTagForm.render_css()</form>
+            <form action="update" method="POST">$:EditTagForm.render_css()</form>
         </td>
 
         <td class="Tasks">
             $for t in usedTags[tag.id]:
-                <a href="/edit/$t">$t</a>
+                <a href="edit/$t">$t</a>
         </td>
 
     </tr>
 
 </table>
 
-<a href="/"><< Back to Tasklist</a>
+<a href="$:path/"><< Back to Tasklist</a>

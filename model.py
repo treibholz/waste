@@ -322,17 +322,29 @@ def sync_all_remote(): # {{{
     output = ''
     for entry in db.select('Sync').list():
         url = '%s/%s' % (entry['remote'], entry['lastsync'], )
-        sync_from(entry['remote'], entry['lastsync'])
-        sync_to(url, entry['lastsync'])
+        auth = ( entry['user'], entry['password'] )
+        sync_from(entry['remote'], entry['lastsync'], auth)
+        sync_to(url, entry['lastsync'], auth)
         output = "Synchronised with: %s at %s \n" % (entry['remote'] , now())
 
     return output
 
 # }}}
 
-def sync_to(url, timestamp=0): # {{{
+def sync_to(url, timestamp=0, auth=False): # {{{
+
+    if auth[0]:
+
+        password_mgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
+        password_mgr.add_password("Waste", url, auth[0], auth[1])
+        handler = urllib2.HTTPBasicAuthHandler(password_mgr)
+        opener = urllib2.build_opener(handler)
+        opener.open(url)
+        urllib2.install_opener(opener)
+
 
     data = unicode(sync_db_get(timestamp))
+
 
     urllib2.urlopen(url, data).read()
 
@@ -340,8 +352,17 @@ def sync_to(url, timestamp=0): # {{{
 
 # }}}
 
-def sync_from(remote, timestamp): # {{{
+def sync_from(remote, timestamp, auth=False): # {{{
     url = '%s/%s' % (remote, timestamp, )
+
+    if auth[0]:
+
+        password_mgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
+        password_mgr.add_password("Waste", url, auth[0], auth[1])
+        handler = urllib2.HTTPBasicAuthHandler(password_mgr)
+        opener = urllib2.build_opener(handler)
+        opener.open(url)
+        urllib2.install_opener(opener)
 
     data = eval(urllib2.urlopen(url).read())
     sync_db_post(data, timestamp, remote)
