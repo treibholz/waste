@@ -397,9 +397,7 @@ def sync_db_post(data, timestamp=0, remote=False): # {{{
 
     solve_conflicts(conflict_dict)
 
-    print remote
     if remote:
-        print remote
         db.update('Sync', lastsync=now(), where="remote = $remote", vars=locals())
 
 # }}}
