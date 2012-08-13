@@ -3,8 +3,12 @@
 import web
 import time
 import urllib2
+import ConfigParser
 
-db = web.database(dbn='sqlite', db='waste.db')
+config = ConfigParser.RawConfigParser()
+config.read('waste.ini')
+
+db = web.database(dbn=config.get('database','type'), db=config.get('database','name'))
 
 task_where = {
     'Status' : ( '(Tasks.status >= $task_where["Status"][1] or Tasks.modified >= strftime("%s","now") - 86400 ) and Tasks.deleted = 0', 0, ),

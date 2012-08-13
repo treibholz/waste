@@ -1,12 +1,12 @@
-$def with (NewTaskForm, DeleteTaskForm, StatusTaskForm, DoneTaskForm, FilterForm, Tasks, Tags)
+$def with (NewTaskForm, DeleteTaskForm, StatusTaskForm, DoneTaskForm, FilterForm, Tasks, Tags, path)
 
 <div class='NewTask'>
-    <form action="/new" method="POST">
+    <form action="$:path/new" method="POST">
         $:NewTaskForm.render_css()
     </form>
 </div>
 <div class='TaskFilter'>
-    <form action="/filter" method="POST">
+    <form action="$:path/filter" method="POST">
         $:FilterForm.render_css()
     </form>
 </div>
@@ -31,15 +31,15 @@ $for task in Tasks:
         <td class="ID">$task.id</td>
 
         <td class="Status">
-            <form name="StatusTaskForm$:task.id" action="/status" method="POST" onchange="this.submit()">$:StatusTaskForm.render_css()</form>
+            <form name="StatusTaskForm$:task.id" action="$:path/status" method="POST" onchange="this.submit()">$:StatusTaskForm.render_css()</form>
         </td>
 
         <td class="Title">
-            <a href="/edit/$task.id">$task.title</a>
+            <a href="$:path/edit/$task.id">$task.title</a>
         </td>
 
         <td class="Done">
-            <form action="/status" method="POST">$:DoneTaskForm.render_css()</form>
+            <form action="$:path/status" method="POST">$:DoneTaskForm.render_css()</form>
         </td>
 
         <td class="Tags">
@@ -50,7 +50,7 @@ $for task in Tasks:
         </td>
 
         <td class="Delete">
-            <form action="/delete" method="POST">$:DeleteTaskForm.render_css()</form>
+            <form action="$:path/delete" method="POST">$:DeleteTaskForm.render_css()</form>
         </td>
 
 
@@ -61,8 +61,8 @@ $for task in Tasks:
 
 <div class="Bottom">
     <ul>
-        <li><a href="/tags">Edit Tags</a></li>
-        <li><a href="/syncall">Sync</a> (Alpha!)</i></li>
+        <li><a href="$:path/tags">Edit Tags</a></li>
+        <li><a href="$:path/syncall">Sync</a> (Alpha!)</i></li>
     </ul>
 </div>
 

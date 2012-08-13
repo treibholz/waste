@@ -3,22 +3,27 @@
 
 import web
 import model
+import ConfigParser
+
+config = ConfigParser.RawConfigParser()
+config.read('waste.ini')
+path = config.get('Main','path')
 
 urls = (
-    '/',                'Index',
-    '/new',             'New',
-    '/status',          'Status',
-    '/filter',          'Filter',
-    '/delete',          'Delete',
-    '/edit/(\d*)',      'Edit',
-    '/files/(.*)',      'Files',
-    '/tags',            'Tags',
-    '/tags/delete',     'Tags_delete',
-    '/tags/update',     'Tags_update',
-    '/favicon.ico',     'Favicon',
-    '/api/(.*)',        'Api',
-    '/sync/(.*)',       'Sync',
-    '/syncall',         'SyncAll',
+    path + '/',                'Index',
+    path +'/new',             'New',
+    path +'/status',          'Status',
+    path +'/filter',          'Filter',
+    path +'/delete',          'Delete',
+    path +'/edit/(\d*)',      'Edit',
+    path +'/files/(.*)',      'Files',
+    path +'/tags',            'Tags',
+    path +'/tags/delete',     'Tags_delete',
+    path +'/tags/update',     'Tags_update',
+    path +'/favicon.ico',     'Favicon',
+    path +'/api/(.*)',        'Api',
+    path +'/sync/(.*)',       'Sync',
+    path +'/syncall',         'SyncAll',
 )
 
 render = web.template.render('templates', base='base',)
@@ -70,7 +75,8 @@ class Index: # {{{
             DoneTaskForm,
             FilterForm,
             Tasks,
-            Tags)
+            Tags,
+            path)
 
 # }}}
 
@@ -82,7 +88,7 @@ class New: # {{{
         if NewTaskForm.validates():
             model.new_task(NewTaskForm.d.title, NewTaskForm.d.tags)
 
-        raise web.seeother('/')
+        raise web.seeother(path + '/')
 
 # }}}
 
@@ -94,7 +100,7 @@ class Delete: # {{{
         if DeleteTaskForm.validates():
             model.delete_task(DeleteTaskForm.d.TaskID)
 
-        raise web.seeother('/')
+        raise web.seeother(path + '/')
 
 # }}}
 
@@ -106,7 +112,7 @@ class Status: # {{{
         if StatusTaskForm.validates():
             model.set_status(StatusTaskForm.d.TaskID, StatusTaskForm.d.Status)
 
-        raise web.seeother('/')
+        raise web.seeother(path + '/')
 
 # }}}
 
@@ -152,7 +158,7 @@ class Edit: # {{{
         if EditTaskForm.validates() and not EditTaskForm.d.Cancel:
             model.update_task(task, EditTaskForm, editTags)
 
-        raise web.seeother('/')
+        raise web.seeother(path + '/')
 
 # }}}
 
@@ -190,7 +196,7 @@ class Tags_delete: # {{{
         if DeleteTagForm.validates():
             model.delete_tag(DeleteTagForm.d.TagID)
 
-        raise web.seeother('/tags')
+        raise web.seeother(path + '/tags')
 
 # }}}
 
@@ -202,7 +208,7 @@ class Tags_update: # {{{
         if EditTagForm.validates():
             model.update_tag(EditTagForm.d.TagID, EditTagForm.d.Name)
 
-        raise web.seeother('/tags')
+        raise web.seeother(path + '/tags')
 
 # }}}
 
@@ -217,7 +223,7 @@ class Filter: # {{{
             else:
                 model.set_tag_filter(FilterForm.d.TagFilter)
 
-        raise web.seeother('/')
+        raise web.seeother(path + '/')
 
 # }}}
 
@@ -255,7 +261,7 @@ class SyncAll:
 
     def GET(self):
         model.sync_all_remote()
-        raise web.seeother('/')
+        raise web.seeother(path + '/')
 
 app = web.application(urls, globals())
 if __name__ == "__main__":
