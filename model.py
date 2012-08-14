@@ -318,13 +318,27 @@ def sync_add_remote(url): # {{{
 
 # }}}
 
-def sync_all_remote(): # {{{
+def sync_all_remote(debug=False): # {{{
     output = ''
     for entry in db.select('Sync').list():
-        url = '%s/%s' % (entry['remote'], entry['lastsync'], )
+        url = '%s/sync/%s' % (entry['remote'], entry['lastsync'], )
         auth = ( entry['user'], entry['password'] )
+
+        if debug: print auth, url
+
+        if auth:
+            password_mgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
+            password_mgr.add_password(None, url, auth[0], auth[1])
+            handler = urllib2.HTTPBasicAuthHandler(password_mgr)
+            opener = urllib2.build_opener(handler)
+            opener.open(url)
+            urllib2.install_opener(opener)
+
+        if debug: print '### Opener installed'
         sync_from(entry['remote'], entry['lastsync'], auth)
+        if debug: print '### sync_from done'
         sync_to(url, entry['lastsync'], auth)
+        if debug: print '### sync_to done'
         output = "Synchronised with: %s at %s \n" % (entry['remote'] , now())
 
     return output
@@ -333,19 +347,9 @@ def sync_all_remote(): # {{{
 
 def sync_to(url, timestamp=0, auth=False): # {{{
 
-    if auth[0]:
-
-        password_mgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
-        password_mgr.add_password("Waste", url, auth[0], auth[1])
-        handler = urllib2.HTTPBasicAuthHandler(password_mgr)
-        opener = urllib2.build_opener(handler)
-        opener.open(url)
-        urllib2.install_opener(opener)
-
-
     data = unicode(sync_db_get(timestamp))
 
-
+    print url
     urllib2.urlopen(url, data).read()
 
     return url
@@ -353,17 +357,9 @@ def sync_to(url, timestamp=0, auth=False): # {{{
 # }}}
 
 def sync_from(remote, timestamp, auth=False): # {{{
-    url = '%s/%s' % (remote, timestamp, )
+    url = '%s/sync/%s' % (remote, timestamp, )
 
-    if auth[0]:
-
-        password_mgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
-        password_mgr.add_password("Waste", url, auth[0], auth[1])
-        handler = urllib2.HTTPBasicAuthHandler(password_mgr)
-        opener = urllib2.build_opener(handler)
-        opener.open(url)
-        urllib2.install_opener(opener)
-
+    print url
     data = eval(urllib2.urlopen(url).read())
     sync_db_post(data, timestamp, remote)
 

@@ -257,8 +257,6 @@ class Sync:
         data = eval(web.webapi.data())
         model.sync_db_post(data, timestamp, remote)
 
-
-
 class SyncAll:
 
     def GET(self):
