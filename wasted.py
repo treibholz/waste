@@ -147,7 +147,7 @@ class Edit: # {{{
         EditTaskForm.Tags.args=model.get_tag_list_tuple()
         EditTaskForm.Status.args=model.get_status_list_tuple()
 
-        return render.edit(EditTaskForm)
+        return render.edit(EditTaskForm, path)
 
     def POST(self, task):
         data = web.webapi.data()

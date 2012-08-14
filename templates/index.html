@@ -1,5 +1,7 @@
 $def with (NewTaskForm, DeleteTaskForm, StatusTaskForm, DoneTaskForm, FilterForm, Tasks, Tags, path)
 
+$var path: $path
+
 <div class='NewTask'>
     <form action="$:path/new" method="POST">
         $:NewTaskForm.render_css()
