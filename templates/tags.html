@@ -16,16 +16,16 @@ $for tag in Tags:
         <td class="ID">$tag.id</td>
 
         <td class="Delete">
-            <form action="delete" method="POST">$:DeleteTagForm.render_css()</form>
+            <form action="$:path/tags/delete" method="POST">$:DeleteTagForm.render_css()</form>
         </td>
 
         <td class="Name">
-            <form action="update" method="POST">$:EditTagForm.render_css()</form>
+            <form action="$:path/tags/update" method="POST">$:EditTagForm.render_css()</form>
         </td>
 
         <td class="Tasks">
             $for t in usedTags[tag.id]:
-                <a href="edit/$t">$t</a>
+                <a href="$:path/edit/$t">$t</a>
         </td>
 
     </tr>
