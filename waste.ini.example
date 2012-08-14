@@ -1,5 +1,6 @@
 [Main]
-path = /waste
+# path = /waste
+path = 
 
 [database]
 # currently only sqlite is supported.
