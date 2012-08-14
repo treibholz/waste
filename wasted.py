@@ -256,7 +256,7 @@ class Sync:
     def POST(self, timestamp=0, remote=False):
         data = eval(web.webapi.data())
         model.sync_db_post(data, timestamp, remote)
-        raise web.seeother(path + '/sync')
+        raise web.seeother(path + '/sync/')
 
 
 
