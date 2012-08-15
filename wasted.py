@@ -241,9 +241,15 @@ class Api: # {{{
         if call.lower() == 'get_tasks':
             return model.api_get_tasks(model.get_taskorder(), model.get_taskfilter())
 
-        if call.lower() == 'get_status_list':
+        elif call.lower() == 'get_status_list':
             status_list = [s[1] for s in model.get_status_list_tuple()]
             return status_list
+
+        elif call.lower() == 'get_tag_filter':
+            return ( model.get_tag_filter(), )
+
+        else:
+            return "What?"
 
 # }}}
 

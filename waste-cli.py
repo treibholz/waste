@@ -11,12 +11,20 @@ class Client(object): # {{{
         self.api_url = api_url
         self.tasks = []
         self.task_filter = []
+        self.tag_filter = []
 
     def get_tasks(self):
         """docstring for get_tasks"""
 
         url = '%s/api/get_tasks' % (self.api_url, )
         self.tasks = eval(urllib2.urlopen(url).read())
+
+    def get_tag_filter(self):
+        """docstring for get_tag_filter"""
+
+        url = '%s/api/get_tag_filter' % (self.api_url, )
+        self.tag_filter = eval(urllib2.urlopen(url).read())[0]
+
 
     def get_status_list(self):
         """docstring for get_status_list"""
@@ -54,7 +62,7 @@ class Display(object): # {{{
         self.__items = ('id', 'title', 'State', )
         self.__separator = separator
 
-    def show_tasks(self, tasks):
+    def show_tasks(self, tasks, tag_filter=False):
         """docstring for show_tasks"""
 
         if len(tasks) == 0:
@@ -63,6 +71,9 @@ class Display(object): # {{{
 
         items = self.__items
         template = self.__get_task_template(tasks)
+
+        if tag_filter:
+            print "Filter: %s" % tag_filter
 
         title = template % tuple( [ i.upper() for i in items ] )
         print title
@@ -107,8 +118,6 @@ class Display(object): # {{{
         return template
     # }}}
 
-
-
     def set_filter(self, items):
         """docstring for set_filter"""
         self.__items = tuple(items)
@@ -141,9 +150,9 @@ if __name__ == "__main__":
             task_id = sys.argv[2]
             c.set_status(task_id, status)
 
-
     d = Display()
     c.get_tasks()
-    d.show_tasks(c.tasks)
+    c.get_tag_filter()
+    d.show_tasks(c.tasks, c.tag_filter)
 
 # vim:fdm=marker:ts=4:sw=4:sts=4:ai:sta:et
