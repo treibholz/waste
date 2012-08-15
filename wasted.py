@@ -20,7 +20,6 @@ urls = (
     path +'/tags',            'Tags',
     path +'/tags/delete',     'Tags_delete',
     path +'/tags/update',     'Tags_update',
-    path +'/favicon.ico',     'Favicon',
     path +'/api/(.*)',        'Api',
     path +'/sync/(.*)',       'Sync',
     path +'/syncall',         'SyncAll',
@@ -226,12 +225,6 @@ class Filter: # {{{
 
         raise web.seeother(path + '/')
 
-# }}}
-
-class Favicon: # {{{
-
-    def GET(self):
-        return open('files/favicon.ico' ).read()
 # }}}
 
 class Api: # {{{
