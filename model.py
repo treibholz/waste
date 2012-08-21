@@ -260,7 +260,7 @@ def set_tag_filter(TagFilter): # {{{
             pass
 
     if taglist != []:
-        task_where['Tags'] = ( "Tasks.id in (select task from Tagged where tag in $task_where['Tags'][1])", taglist, )
+        task_where['Tags'] = ( "Tasks.id in (select task from Tagged where tag in $task_where['Tags'][1] and deleted=0)", taglist, )
     else:
         task_where['Tags'] = None
 
